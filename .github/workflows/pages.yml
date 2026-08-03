@@ -6,8 +6,9 @@ on:
       - development
     paths:
       - "demo/**"
+      - "stories/**"
+      - ".storybook/**"
       - "packages/**"
-      - "vite.config.js"
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/pages.yml"

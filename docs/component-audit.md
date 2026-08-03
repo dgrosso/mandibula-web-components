@@ -19,6 +19,6 @@ Keep `pointer` as an optional visual package, not part of essential navigation o
 ## Manual verification still required
 
 - VoiceOver + Safari and NVDA + Firefox smoke tests for fader and suspense state changes.
-- Keyboard-only walkthrough of every interactive demo.
+- Keyboard-only walkthrough of every interactive Storybook story.
 - Real caption review for shipped media.
 - 200% zoom and high-contrast review of consumer themes.

@@ -64,7 +64,14 @@ See [framework interoperability](docs/frameworks.md) for React, Vue, and plain H
 npm install
 npm test
 npm run check
-npm run demo
+npm run storybook
+```
+
+Run `npm run demo:build` to validate and produce the static Storybook in `site/`.
+To open the development Storybook from another device, allow its hostname:
+
+```sh
+STORYBOOK_ALLOWED_HOSTS=100.119.211.103 npm run storybook -- --host 0.0.0.0 --no-open
 ```
 
 Package releases use Changesets. Public APIs are described by generated Custom Elements Manifests.

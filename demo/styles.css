@@ -179,6 +179,11 @@ button:hover,
   box-shadow: var(--demo-shadow);
 }
 
+.demo-story {
+  width: min(100% - 2rem, 48rem);
+  margin-inline: auto;
+}
+
 .demo-card > :first-child {
   margin-block-start: 0;
 }
