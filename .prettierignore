@@ -1,4 +1,5 @@
 node_modules
+.retired-components
 custom-elements.json
 package-lock.json
 coverage

@@ -7,18 +7,21 @@ Framework-agnostic custom elements built with Lit. Every component is an indepen
 ## Install one component
 
 ```sh
-npm install @mandibula/counter
+npm install @mandibula/spinner
 ```
 
 ```html
 <script type="module">
-  import "https://esm.sh/@mandibula/counter";
+  import "https://esm.sh/@mandibula/spinner";
 </script>
 
-<mdb-counter value="1200" duration="800"></mdb-counter>
+<span role="status">
+  <mdb-spinner aria-hidden="true"></mdb-spinner>
+  Loading
+</span>
 ```
 
-Bundlers can use `import "@mandibula/counter"`. The optional `@mandibula/web-components` package registers the full collection.
+Bundlers can use `import "@mandibula/spinner"`. The optional `@mandibula/web-components` package registers the full collection.
 
 ## Frameworks
 
@@ -27,40 +30,33 @@ The components use standard attributes, properties, slots, CSS custom properties
 React 19+ renders custom elements directly:
 
 ```jsx
-import "@mandibula/counter";
+import "@mandibula/spinner";
 
-export function Total() {
-  return <mdb-counter value={1200}></mdb-counter>;
+export function Loading() {
+  return (
+    <span role="status">
+      <mdb-spinner aria-hidden="true"></mdb-spinner>
+      Loading
+    </span>
+  );
 }
 ```
 
 For custom events in any framework, attach a native listener to the element. In React, use a ref when the framework version does not map that event automatically.
 
-See [framework interoperability](docs/frameworks.md) for React, Vue, and plain HTML event examples. Components with light-DOM layout styles expose them as package subpaths, such as `@mandibula/carousel/styles.css` and `@mandibula/modal/styles.css`.
+See [framework interoperability](docs/frameworks.md) for React, Vue, and plain HTML examples.
 
 ## Packages
 
-| Package                              | Elements                                                             |
-| ------------------------------------ | -------------------------------------------------------------------- |
-| `@mandibula/accessible-menu`         | `mdb-accessible-menu`                                                |
-| `@mandibula/carousel`                | `mdb-carousel`                                                       |
-| `@mandibula/clickable-area`          | `mdb-clickable-area`                                                 |
-| `@mandibula/collapsible`             | `mdb-collapsible`                                                    |
-| `@mandibula/counter`                 | `mdb-counter`                                                        |
-| `@mandibula/document-preview-button` | `mdb-document-preview-button`                                        |
-| `@mandibula/fader`                   | `mdb-fader`                                                          |
-| `@mandibula/media-slot`              | `mdb-media-slot`                                                     |
-| `@mandibula/modal`                   | `mdb-modal`, `mdb-modal-container`                                   |
-| `@mandibula/pagination`              | `mdb-pagination`                                                     |
-| `@mandibula/paper`                   | `mdb-paper`                                                          |
-| `@mandibula/pointer`                 | `mdb-pointer`                                                        |
-| `@mandibula/post-loop`               | `mdb-post-loop`, `mdb-post-loop-filters`, `mdb-post-loop-pagination` |
-| `@mandibula/responsive-text`         | `mdb-responsive-text`                                                |
-| `@mandibula/scoped-inline-svg`       | `mdb-scoped-inline-svg`                                              |
-| `@mandibula/spinner`                 | `mdb-spinner`                                                        |
-| `@mandibula/suspense`                | `mdb-suspense`                                                       |
-| `@mandibula/video`                   | `mdb-video`                                                          |
-| `@mandibula/video-modal-button`      | `mdb-video-modal-button`                                             |
+| Package                        | Elements                |
+| ------------------------------ | ----------------------- |
+| `@mandibula/fader`             | `mdb-fader`             |
+| `@mandibula/media-slot`        | `mdb-media-slot`        |
+| `@mandibula/pointer`           | `mdb-pointer`           |
+| `@mandibula/scoped-inline-svg` | `mdb-scoped-inline-svg` |
+| `@mandibula/spinner`           | `mdb-spinner`           |
+| `@mandibula/suspense`          | `mdb-suspense`          |
+| `@mandibula/video`             | `mdb-video`             |
 
 ## Development
 

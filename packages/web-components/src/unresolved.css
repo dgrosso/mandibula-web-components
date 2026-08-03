@@ -1,13 +1,9 @@
 mdb-fader:not(:defined),
-mdb-counter:not(:defined),
+mdb-media-slot:not(:defined),
+mdb-pointer:not(:defined),
 mdb-scoped-inline-svg:not(:defined),
-mdb-marquee:not(:defined),
-mdb-pagination:not(:defined),
-mdb-post-loop:not(:defined),
-mdb-post-loop-filters:not(:defined),
-mdb-post-loop-pagination:not(:defined),
-mdb-document-preview-button:not(:defined),
-mdb-video-modal-button:not(:defined),
-mdb-responsive-text:not(:defined) {
+mdb-spinner:not(:defined),
+mdb-suspense:not(:defined),
+mdb-video:not(:defined) {
   visibility: hidden;
 }

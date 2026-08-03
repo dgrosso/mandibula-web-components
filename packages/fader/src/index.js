@@ -2,9 +2,9 @@
 // LitElement component that fades between its slotted children (no decorators)
 // - No decorators used
 // - Accessible (ARIA for carousel pattern)
-// - Listens to an <mdb-pagination> placed in a named slot="pagination"
+// - Listens to a compatible control placed in a named slot="pagination"
 // - Exposes imperative methods: next(), prev(), goTo(index)
-// - Syncs with mdb-pagination if present (updates its pages/current when our state changes)
+// - Syncs with slotted controls exposing pages/current properties
 
 import { LitElement, css, html } from "lit";
 

@@ -6,6 +6,7 @@ export default [
     ignores: [
       "**/node_modules/**",
       "**/custom-elements.json",
+      ".retired-components/**",
       "coverage/**",
       "site/**",
     ],

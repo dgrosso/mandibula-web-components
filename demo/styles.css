@@ -250,38 +250,8 @@ button:hover,
   color: #23130e;
 }
 
-.demo-carousel__track {
-  gap: 1rem;
-}
-
-.demo-carousel__panel {
-  width: min(80%, 24rem);
-  min-height: 12rem;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  background: var(--demo-surface-strong);
-}
-
 mdb-fader > [data-fader-item] {
   padding: 1rem;
-}
-
-mdb-accessible-menu [aria-hidden="true"] {
-  display: none;
-}
-
-mdb-accessible-menu ul {
-  margin: 0;
-  padding-inline-start: 1.25rem;
-}
-
-mdb-collapsible {
-  border-block: 0.0625rem solid var(--demo-border);
-}
-
-mdb-counter {
-  font-size: clamp(2rem, 10cqi, 4rem);
-  font-weight: 800;
 }
 
 mdb-media-slot,
@@ -289,27 +259,6 @@ mdb-video {
   display: block;
   width: 100%;
   min-height: 10rem;
-}
-
-mdb-modal .demo-modal-content {
-  min-width: min(32rem, calc(100vw - 3rem));
-  padding: 3.5rem 1.5rem 1.5rem;
-}
-
-mdb-pagination::part(nav) {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-mdb-pagination::part(indicators) {
-  display: flex;
-  gap: 0.25rem;
-}
-
-mdb-pagination::part(indicator-current) {
-  color: var(--demo-accent-text);
-  background: var(--demo-accent);
 }
 
 mdb-suspense {
@@ -331,28 +280,8 @@ mdb-suspense {
   background: #7b351b;
 }
 
-.demo-posts {
-  display: grid;
-  gap: 0.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-mdb-paper {
-  display: block;
-  min-height: 10rem;
-  padding: 2rem;
-}
-
 mdb-spinner {
   margin: 0.5rem;
-}
-
-mdb-responsive-text {
-  height: 7rem;
-  font-size: 3rem;
-  font-weight: 800;
 }
 
 @media (max-width: 48rem) {

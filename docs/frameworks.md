@@ -5,8 +5,11 @@
 Use an ESM CDN or an import map. Import only the packages used on the page.
 
 ```html
-<script type="module" src="https://esm.sh/@mandibula/collapsible"></script>
-<mdb-collapsible open>Content</mdb-collapsible>
+<script type="module" src="https://esm.sh/@mandibula/spinner"></script>
+<span role="status">
+  <mdb-spinner aria-hidden="true"></mdb-spinner>
+  Loading
+</span>
 ```
 
 ## React
@@ -15,20 +18,24 @@ React 19+ passes custom-element attributes and properties using its native custo
 
 ```jsx
 import { useEffect, useRef } from "react";
-import "@mandibula/post-loop";
+import "@mandibula/fader";
 
-export function PostLoop() {
+export function Highlights() {
   const ref = useRef(null);
 
   useEffect(() => {
     const element = ref.current;
-    const onSelection = (event) => console.log(event.detail.selections);
-    element.addEventListener("mdb-post-loop-selections", onSelection);
-    return () =>
-      element.removeEventListener("mdb-post-loop-selections", onSelection);
+    const onChange = (event) => console.log(event.detail.index);
+    element.addEventListener("change", onChange);
+    return () => element.removeEventListener("change", onChange);
   }, []);
 
-  return <mdb-post-loop ref={ref} posts-per-page="12" />;
+  return (
+    <mdb-fader ref={ref} label="Highlights">
+      <article>First highlight</article>
+      <article>Second highlight</article>
+    </mdb-fader>
+  );
 }
 ```
 
