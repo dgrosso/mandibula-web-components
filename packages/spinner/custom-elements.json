@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbSpinner",
+          "members": [
+            {
+              "kind": "field",
+              "name": "properties",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ template: { type: String }, }"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; width: var(--mdb-spinner-size, 1.5rem); height: var(--mdb-spinner-size, 1.5rem); border: var(--mdb-spinner-border-width, 0.125rem) solid var(--mdb-spinner-bg, color-mix(in srgb, currentColor 10%, transparent)); border-left-color: var(--mdb-spinner-color, currentColor); border-radius: 50%; animation: mdb-spinner-spin 1s linear infinite; } @keyframes mdb-spinner-spin { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { :host { animation: none; } } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "field",
+              "name": "template",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"mdb-spinner-template\""
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-spinner",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbSpinner",
+          "declaration": {
+            "name": "MdbSpinner",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-spinner",
+          "declaration": {
+            "name": "MdbSpinner",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

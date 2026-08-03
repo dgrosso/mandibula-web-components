@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbCollapsible",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; } .content { overflow: hidden; /* necessary */ height: 0; transition: height var(--mdb-collapsible-animation-duration, 350ms) ease; } :host([open]) .content { /* height is controlled programmatically; this selector exists so CSS specificity knows when the element is intended to be open. */ } `"
+            },
+            {
+              "kind": "field",
+              "name": "properties",
+              "static": true,
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "openCollapsible"
+            },
+            {
+              "kind": "method",
+              "name": "closeCollapsible"
+            },
+            {
+              "kind": "method",
+              "name": "toggleCollapsible"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProps"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onTransitionEnd",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-collapsible",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbCollapsible",
+          "declaration": {
+            "name": "MdbCollapsible",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-collapsible",
+          "declaration": {
+            "name": "MdbCollapsible",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

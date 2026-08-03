@@ -1,0 +1,19 @@
+mdb-media-slot:not(:defined) {
+  position: relative;
+  display: flex;
+  width: 100%;
+  aspect-ratio: var(
+    --mdb-media-slot-aspect-ratio,
+    var(--mdb-media-slot-natural-aspect-ratio, auto)
+  );
+
+  @supports (left: attr(x type(*))) {
+    aspect-ratio: var(
+      --mdb-media-slot-aspect-ratio,
+      var(
+        --mdb-media-slot-natural-aspect-ratio,
+        attr(width type(<number>)) / attr(height type(<number>))
+      )
+    );
+  }
+}

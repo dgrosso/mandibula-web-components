@@ -1,0 +1,311 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbCarousel",
+          "members": [
+            {
+              "kind": "field",
+              "name": "properties",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ clickPanels: { type: Boolean, reflect: true, attribute: \"click-panels\" }, panelLinkSelector: { type: String, attribute: \"panel-link-selector\" }, trackSelector: { type: String, attribute: \"track-selector\" }, viewportSelector: { type: String, attribute: \"viewport-selector\" }, }"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; --mdb-carousel-anchor: 0px; --mdb-carousel-padding-inline-start: 0px; --mdb-carousel-padding-inline-end: 0px; } .pagination { display: block; } .pagination[hidden] { display: none; } ::slotted([slot=\"pagination\"]) { display: block; } ::slotted([slot=\"pagination\"][hidden]) { display: none; } `"
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProperties"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onDefaultSlotChange"
+            },
+            {
+              "kind": "method",
+              "name": "_getPaginationElements"
+            },
+            {
+              "kind": "method",
+              "name": "_getSlottedPaginationElements"
+            },
+            {
+              "kind": "method",
+              "name": "_hasPersistentPaginationSlotContent",
+              "parameters": [
+                {
+                  "name": "slottedElements",
+                  "default": "[]"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_syncPaginationContainerVisibility",
+              "parameters": [
+                {
+                  "name": "shouldHide",
+                  "default": "false"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_findCarouselElements"
+            },
+            {
+              "kind": "method",
+              "name": "_resolveViewportElement",
+              "parameters": [
+                {
+                  "name": "viewportElement"
+                },
+                {
+                  "name": "trackElement"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_syncViewportStyles",
+              "parameters": [
+                {
+                  "name": "viewportElement"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_initializeCarousel"
+            },
+            {
+              "kind": "method",
+              "name": "_syncPanelElements"
+            },
+            {
+              "kind": "method",
+              "name": "_syncClickablePanels"
+            },
+            {
+              "kind": "method",
+              "name": "_syncCarouselStateObservers"
+            },
+            {
+              "kind": "method",
+              "name": "_disconnectCarouselStateObservers"
+            },
+            {
+              "kind": "method",
+              "name": "_teardownCarousel"
+            },
+            {
+              "kind": "method",
+              "name": "_getLastPanelIndex"
+            },
+            {
+              "kind": "method",
+              "name": "_setActiveIndex",
+              "parameters": [
+                {
+                  "name": "index"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_updatePagination"
+            },
+            {
+              "kind": "method",
+              "name": "_scrollPanelIntoView",
+              "parameters": [
+                {
+                  "name": "index"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "prev"
+            },
+            {
+              "kind": "method",
+              "name": "next"
+            },
+            {
+              "kind": "method",
+              "name": "goTo",
+              "parameters": [
+                {
+                  "name": "index"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onPaginationEvent",
+              "parameters": [
+                {
+                  "name": "event"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onPaginationSlotChange"
+            },
+            {
+              "kind": "method",
+              "name": "_syncPaginationElements"
+            },
+            {
+              "kind": "method",
+              "name": "_syncPaginationFromCarousel"
+            },
+            {
+              "kind": "method",
+              "name": "_syncCarouselFromPagination"
+            },
+            {
+              "kind": "method",
+              "name": "_onScrollSnapChange",
+              "parameters": [
+                {
+                  "name": "event"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_syncFromVisiblePanels",
+              "parameters": [
+                {
+                  "name": "entries",
+                  "default": "[]"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onScroll"
+            },
+            {
+              "kind": "method",
+              "name": "_getClosestPanelIndex"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "field",
+              "name": "clickPanels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "panelLinkSelector",
+              "default": "\"[data-clickable-area='target'], a[href]\"",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "trackSelector",
+              "default": "\"[data-mdb-carousel-track], .wp-block-post-template\"",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "viewportSelector",
+              "default": "\"[data-mdb-carousel-viewport], .wp-block-query\"",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_activeIndex",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_panelClickHandlers",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_panelEls",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_prefersReducedMotion"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-carousel",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbCarousel",
+          "declaration": {
+            "name": "MdbCarousel",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-carousel",
+          "declaration": {
+            "name": "MdbCarousel",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

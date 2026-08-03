@@ -1,0 +1,499 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbPostLoop",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot"
+            },
+            {
+              "kind": "field",
+              "name": "currentPage",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "totalPages",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "getSelections"
+            },
+            {
+              "kind": "method",
+              "name": "setSelections",
+              "parameters": [
+                {
+                  "name": "selections",
+                  "default": "{}"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_onFilterChange"
+            },
+            {
+              "kind": "field",
+              "name": "_onPageSelected"
+            },
+            {
+              "kind": "method",
+              "name": "_syncSelectionState"
+            },
+            {
+              "kind": "method",
+              "name": "_setLoadingState",
+              "parameters": [
+                {
+                  "name": "isLoading"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "fetchPosts",
+              "parameters": [
+                {
+                  "name": "{ mode = \"replace\" }",
+                  "default": "{}"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_selectedSelections",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "_fixedSelections",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "_abortController",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_currentPage",
+              "type": {
+                "text": "number"
+              },
+              "default": "1"
+            },
+            {
+              "kind": "field",
+              "name": "_totalPages",
+              "type": {
+                "text": "number"
+              },
+              "default": "1"
+            },
+            {
+              "kind": "field",
+              "name": "_loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            }
+          ],
+          "events": [
+            {
+              "name": "mdb-post-loop-selections",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "mdb-pagination-data",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-post-loop",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbPostLoopFilters",
+          "members": [
+            {
+              "kind": "field",
+              "name": "properties",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ allLabel: { type: String, attribute: \"all-label\" }, filterKey: { type: String, attribute: \"filter-key\" }, isMultiple: { type: Boolean, attribute: \"multiple\" }, options: { type: String }, placeholder: { type: String }, taxonomy: { type: String }, terms: { state: true }, ui: { type: String }, }"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; } button, select { font: inherit; } `"
+            },
+            {
+              "kind": "field",
+              "name": "_onSelectionsUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "_selectionKey"
+            },
+            {
+              "kind": "method",
+              "name": "_syncFromLoop"
+            },
+            {
+              "kind": "method",
+              "name": "_loadTerms"
+            },
+            {
+              "kind": "method",
+              "name": "_staticOptions"
+            },
+            {
+              "kind": "method",
+              "name": "_optionsList"
+            },
+            {
+              "kind": "method",
+              "name": "_dispatchSelectionChange",
+              "parameters": [
+                {
+                  "name": "nextValues"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_toggleValue",
+              "parameters": [
+                {
+                  "name": "value"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "clear"
+            },
+            {
+              "kind": "method",
+              "name": "_renderButtons",
+              "parameters": [
+                {
+                  "name": "options"
+                },
+                {
+                  "name": "{ isTabs = false }",
+                  "default": "{}"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_renderSelect",
+              "parameters": [
+                {
+                  "name": "options"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "field",
+              "name": "allLabel",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "filterKey",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "isMultiple",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "taxonomy",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "terms",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "ui",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"buttons\""
+            },
+            {
+              "kind": "field",
+              "name": "_selectedValues",
+              "default": "new Set()"
+            }
+          ],
+          "events": [
+            {
+              "name": "mdb-post-loop-filter-change",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-post-loop-filters",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbPostLoopPagination",
+          "members": [
+            {
+              "kind": "field",
+              "name": "properties",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ currentPage: { state: true }, limit: { type: Number }, mode: { type: String }, totalPages: { state: true }, }"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` button { all: unset; cursor: pointer; } `"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProperties"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_onPaginationData"
+            },
+            {
+              "kind": "field",
+              "name": "_onSelectionsUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "_isExhausted"
+            },
+            {
+              "kind": "method",
+              "name": "_syncExhaustedState"
+            },
+            {
+              "kind": "method",
+              "name": "_goTo",
+              "parameters": [
+                {
+                  "name": "page"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_getPageRange"
+            },
+            {
+              "kind": "method",
+              "name": "_renderLoadMorePagination"
+            },
+            {
+              "kind": "method",
+              "name": "_renderClassicPagination"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "field",
+              "name": "currentPage",
+              "type": {
+                "text": "number"
+              },
+              "default": "1"
+            },
+            {
+              "kind": "field",
+              "name": "limit",
+              "type": {
+                "text": "number"
+              },
+              "default": "5"
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"classic\""
+            },
+            {
+              "kind": "field",
+              "name": "totalPages",
+              "type": {
+                "text": "number"
+              },
+              "default": "1"
+            },
+            {
+              "kind": "field",
+              "name": "_hasPaginationData",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            }
+          ],
+          "events": [
+            {
+              "name": "mdb-page-selected",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-post-loop-pagination",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbPostLoop",
+          "declaration": {
+            "name": "MdbPostLoop",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-post-loop",
+          "declaration": {
+            "name": "MdbPostLoop",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MdbPostLoopFilters",
+          "declaration": {
+            "name": "MdbPostLoopFilters",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-post-loop-filters",
+          "declaration": {
+            "name": "MdbPostLoopFilters",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MdbPostLoopPagination",
+          "declaration": {
+            "name": "MdbPostLoopPagination",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-post-loop-pagination",
+          "declaration": {
+            "name": "MdbPostLoopPagination",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

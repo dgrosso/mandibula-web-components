@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbPointer",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot"
+            },
+            {
+              "kind": "method",
+              "name": "_onMove",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onEnter",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onLeave",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "container"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"fixed\""
+            },
+            {
+              "kind": "field",
+              "name": "pointerEvents",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"none\""
+            },
+            {
+              "kind": "field",
+              "name": "zIndex",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"9999\""
+            },
+            {
+              "kind": "field",
+              "name": "display",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"none\""
+            },
+            {
+              "kind": "field",
+              "name": "enabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-pointer",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbPointer",
+          "declaration": {
+            "name": "MdbPointer",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-pointer",
+          "declaration": {
+            "name": "MdbPointer",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

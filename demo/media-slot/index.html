@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Media slot examples." />
+    <title>Media slot · Mandíbula</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="demo-header">
+      <div class="demo-header__inner">
+        <a class="demo-brand" href="../">Mandíbula Web Components</a
+        ><a href="https://github.com/dgrosso/mandibula-web-components"
+          >GitHub</a
+        >
+      </div>
+    </header>
+    <div class="demo-layout">
+      <aside class="demo-sidebar">
+        <nav class="demo-nav" aria-label="Component demos" data-demo-nav></nav>
+      </aside>
+      <main id="content" class="demo-main" tabindex="-1">
+        <header class="demo-intro">
+          <p class="demo-kicker">mdb-media-slot</p>
+          <h1>Media slot</h1>
+          <p>
+            Responsive image, sanitized SVG, and video rendering with suspense.
+          </p>
+        </header>
+        <div class="demo-grid">
+          <section class="demo-card">
+            <h2>Image</h2>
+            <div class="demo-stage">
+              <mdb-media-slot
+                src="../assets/landscape.svg?image=1"
+                alt="Stylized mountains at sunset"
+                width="1200"
+                height="675"
+                loading="eager"
+              ></mdb-media-slot>
+            </div>
+            <code class="demo-code"
+              >Options: src, srcset, sizes, alt, dimensions, loading.</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>Scoped SVG</h2>
+            <div class="demo-stage">
+              <mdb-media-slot
+                src="../assets/landscape.svg"
+                alt="Stylized mountain illustration"
+              ></mdb-media-slot>
+            </div>
+            <code class="demo-code"
+              >SVG uses scoped identifiers and sanitized markup.</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>Background</h2>
+            <div class="demo-stage">
+              <mdb-media-slot
+                src="../assets/landscape.svg?image=2"
+                alt=""
+                background
+                width="1200"
+                height="675"
+              ></mdb-media-slot>
+            </div>
+            <code class="demo-code"
+              >background is decorative when alt is empty.</code
+            >
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../main.js"></script>
+  </body>
+</html>

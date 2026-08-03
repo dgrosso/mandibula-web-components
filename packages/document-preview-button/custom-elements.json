@@ -1,0 +1,163 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbDocumentPreviewButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "properties",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ closeLabel: { type: String, attribute: \"close-label\" }, documentLabel: { type: String, attribute: \"document-label\" }, downloadLabel: { type: String, attribute: \"download-label\" }, downloadUrl: { type: String, attribute: \"download-url\" }, embedSrc: { type: String, attribute: \"embed-src\" }, embedSandbox: { type: String, attribute: \"embed-sandbox\" }, excerpt: { type: String }, heading: { type: String }, previewLabel: { type: String, attribute: \"preview-label\" }, }"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: block; } `"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "_bindTrigger"
+            },
+            {
+              "kind": "method",
+              "name": "_unbindTrigger"
+            },
+            {
+              "kind": "method",
+              "name": "_handleTriggerClick",
+              "parameters": [
+                {
+                  "name": "event"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_openModal"
+            },
+            {
+              "kind": "method",
+              "name": "_getModalContent"
+            },
+            {
+              "kind": "field",
+              "name": "closeLabel",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Close preview\""
+            },
+            {
+              "kind": "field",
+              "name": "documentLabel",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "downloadLabel",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Download\""
+            },
+            {
+              "kind": "field",
+              "name": "downloadUrl",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "embedSrc",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "embedSandbox",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"allow-downloads allow-same-origin allow-scripts\""
+            },
+            {
+              "kind": "field",
+              "name": "excerpt",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "heading",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "previewLabel",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Preview document\""
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-document-preview-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbDocumentPreviewButton",
+          "declaration": {
+            "name": "MdbDocumentPreviewButton",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-document-preview-button",
+          "declaration": {
+            "name": "MdbDocumentPreviewButton",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

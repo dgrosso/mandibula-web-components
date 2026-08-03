@@ -1,0 +1,46 @@
+{
+  "name": "mandibula-web-components",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Framework-agnostic web components built with Lit.",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "check": "npm run format:check && npm run lint && npm test && npm run manifest && npm run publint && npm run demo:build",
+    "demo": "vite --config vite.config.js",
+    "demo:build": "npm run demo:validate && vite build --config vite.config.js",
+    "demo:preview": "vite preview --config vite.config.js",
+    "demo:validate": "node scripts/validate-demos.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "manifest": "npm run manifest --workspaces --if-present",
+    "publint": "npm run publint --workspaces --if-present",
+    "test": "npm run test:browser && npm run test:ssr",
+    "test:browser": "web-test-runner --config web-test-runner.config.js",
+    "test:ssr": "node scripts/ssr-smoke.mjs",
+    "test:watch": "npm run test:browser -- --watch",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.7",
+    "@custom-elements-manifest/analyzer": "^0.11.0",
+    "@eslint/js": "^9.39.1",
+    "@open-wc/testing": "^5.0.0",
+    "@web/test-runner": "^1.0.0",
+    "@web/test-runner-playwright": "^1.0.0",
+    "eslint": "^10.8.0",
+    "globals": "^16.5.0",
+    "prettier": "^3.9.6",
+    "publint": "^0.3.22",
+    "vite": "^8.2.0"
+  },
+  "license": "MIT"
+}

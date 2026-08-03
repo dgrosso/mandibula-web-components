@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Modal examples." />
+    <title>Modal · Mandíbula</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="demo-header">
+      <div class="demo-header__inner">
+        <a class="demo-brand" href="../">Mandíbula Web Components</a
+        ><a href="https://github.com/dgrosso/mandibula-web-components"
+          >GitHub</a
+        >
+      </div>
+    </header>
+    <div class="demo-layout">
+      <aside class="demo-sidebar">
+        <nav class="demo-nav" aria-label="Component demos" data-demo-nav></nav>
+      </aside>
+      <main id="content" class="demo-main" tabindex="-1">
+        <header class="demo-intro">
+          <p class="demo-kicker">mdb-modal</p>
+          <h1>Modal</h1>
+          <p>A programmatic modal with close behavior and lifecycle events.</p>
+        </header>
+        <div class="demo-grid">
+          <section class="demo-card">
+            <h2>Default</h2>
+            <div class="demo-stage">
+              <button
+                type="button"
+                data-demo-action="open-modal"
+                data-target="modal-default"
+              >
+                Open modal</button
+              ><mdb-modal id="modal-default" close-label="Close dialog"
+                ><section class="demo-modal-content">
+                  <h2>Example dialog</h2>
+                  <p>Escape and close dismiss it.</p>
+                  <button type="button">Focusable action</button>
+                </section></mdb-modal
+              >
+            </div>
+            <code class="demo-code"
+              >Property: open. Events: mdb-modal-opened and
+              mdb-modal-closed.</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>No outside close</h2>
+            <div class="demo-stage">
+              <button
+                type="button"
+                data-demo-action="open-modal"
+                data-target="modal-strict"
+              >
+                Open persistent modal</button
+              ><mdb-modal
+                id="modal-strict"
+                close-on-outside-click="false"
+                close-label="Done"
+                ><section class="demo-modal-content">
+                  <h2>Explicit dismissal</h2>
+                  <p>Backdrop clicks are ignored.</p>
+                </section></mdb-modal
+              >
+            </div>
+            <code class="demo-code"
+              >close-on-outside-click controls light dismissal.</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>Mounted wrapper</h2>
+            <div class="demo-stage">
+              <button
+                type="button"
+                data-demo-action="open-modal"
+                data-target="modal-mounted"
+              >
+                Open reusable modal</button
+              ><mdb-modal id="modal-mounted" remove-on-close="false"
+                ><section class="demo-modal-content">
+                  <h2>Reusable content</h2>
+                  <p>The wrapper stays mounted.</p>
+                </section></mdb-modal
+              >
+            </div>
+            <code class="demo-code"
+              >remove-on-close controls wrapper removal.</code
+            >
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../main.js"></script>
+  </body>
+</html>

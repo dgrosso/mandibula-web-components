@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Document preview button examples." />
+    <title>Document preview button · Mandíbula</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="demo-header">
+      <div class="demo-header__inner">
+        <a class="demo-brand" href="../">Mandíbula Web Components</a
+        ><a href="https://github.com/dgrosso/mandibula-web-components"
+          >GitHub</a
+        >
+      </div>
+    </header>
+    <div class="demo-layout">
+      <aside class="demo-sidebar">
+        <nav class="demo-nav" aria-label="Component demos" data-demo-nav></nav>
+      </aside>
+      <main id="content" class="demo-main" tabindex="-1">
+        <header class="demo-intro">
+          <p class="demo-kicker">mdb-document-preview-button</p>
+          <h1>Document preview button</h1>
+          <p>Connects an authored trigger to a document preview modal.</p>
+        </header>
+        <div class="demo-grid">
+          <section class="demo-card">
+            <h2>Full preview</h2>
+            <div class="demo-stage">
+              <mdb-document-preview-button
+                heading="Landscape study"
+                excerpt="Local SVG preview."
+                document-label="Example file"
+                download-label="Download SVG"
+                download-url="../assets/landscape.svg"
+                embed-src="../assets/landscape.svg"
+                ><button slot="trigger" type="button">
+                  Preview document
+                </button></mdb-document-preview-button
+              >
+            </div>
+            <code class="demo-code"
+              >Options: heading, excerpt, labels, download-url, embed-src.</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>Metadata only</h2>
+            <div class="demo-stage">
+              <mdb-document-preview-button
+                heading="Release notes"
+                excerpt="Preview without an embed."
+                close-label="Dismiss preview"
+                ><button slot="trigger" type="button">
+                  Read summary
+                </button></mdb-document-preview-button
+              >
+            </div>
+            <code class="demo-code">close-label customizes dismissal.</code>
+          </section>
+          <section class="demo-card">
+            <h2>Link trigger</h2>
+            <div class="demo-stage">
+              <mdb-document-preview-button
+                heading="Linked preview"
+                embed-src="../assets/landscape.svg"
+                ><a slot="trigger" href="../assets/landscape.svg"
+                  >Preview before navigation</a
+                ></mdb-document-preview-button
+              >
+            </div>
+            <code class="demo-code"
+              >The trigger slot accepts authored controls.</code
+            >
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../main.js"></script>
+  </body>
+</html>

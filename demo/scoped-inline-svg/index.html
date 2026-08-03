@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Scoped inline SVG examples." />
+    <title>Scoped inline SVG · Mandíbula</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="demo-header">
+      <div class="demo-header__inner">
+        <a class="demo-brand" href="../">Mandíbula Web Components</a
+        ><a href="https://github.com/dgrosso/mandibula-web-components"
+          >GitHub</a
+        >
+      </div>
+    </header>
+    <div class="demo-layout">
+      <aside class="demo-sidebar">
+        <nav class="demo-nav" aria-label="Component demos" data-demo-nav></nav>
+      </aside>
+      <main id="content" class="demo-main" tabindex="-1">
+        <header class="demo-intro">
+          <p class="demo-kicker">mdb-scoped-inline-svg</p>
+          <h1>Scoped inline SVG</h1>
+          <p>Fetches, sanitizes, scopes identifiers, and exposes inline SVG.</p>
+        </header>
+        <div class="demo-grid">
+          <section class="demo-card">
+            <h2>Scoped IDs</h2>
+            <div class="demo-stage">
+              <mdb-scoped-inline-svg
+                src="../assets/landscape.svg"
+                aria-label="Mountain illustration"
+              ></mdb-scoped-inline-svg>
+            </div>
+            <code class="demo-code">Gradient and clip IDs become unique.</code>
+          </section>
+          <section class="demo-card">
+            <h2>Fill override</h2>
+            <div class="demo-stage">
+              <mdb-scoped-inline-svg
+                src="../assets/landscape.svg"
+                override-fill
+                aria-label="Single-color mountain icon"
+                style="color: var(--demo-accent)"
+              ></mdb-scoped-inline-svg>
+            </div>
+            <code class="demo-code">override-fill uses currentColor.</code>
+          </section>
+          <section class="demo-card">
+            <h2>Decorative</h2>
+            <div class="demo-stage">
+              <mdb-scoped-inline-svg
+                src="../assets/landscape.svg"
+                aria-hidden="true"
+              ></mdb-scoped-inline-svg>
+            </div>
+            <code class="demo-code"
+              >Decorative SVG stays out of the accessibility tree.</code
+            >
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../main.js"></script>
+  </body>
+</html>

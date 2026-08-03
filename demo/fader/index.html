@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Fader examples." />
+    <title>Fader · Mandíbula</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="demo-header">
+      <div class="demo-header__inner">
+        <a class="demo-brand" href="../">Mandíbula Web Components</a
+        ><a href="https://github.com/dgrosso/mandibula-web-components"
+          >GitHub</a
+        >
+      </div>
+    </header>
+    <div class="demo-layout">
+      <aside class="demo-sidebar">
+        <nav class="demo-nav" aria-label="Component demos" data-demo-nav></nav>
+      </aside>
+      <main id="content" class="demo-main" tabindex="-1">
+        <header class="demo-intro">
+          <p class="demo-kicker">mdb-fader</p>
+          <h1>Fader</h1>
+          <p>
+            A keyboard-operable fading carousel with configurable transitions.
+          </p>
+        </header>
+        <div class="demo-grid">
+          <section class="demo-card">
+            <h2>Basic</h2>
+            <div class="demo-stage">
+              <mdb-fader id="demo-fader" label="Feature highlights"
+                ><article>
+                  <h3>First item</h3>
+                  <p>Use arrow keys.</p>
+                </article>
+                <article>
+                  <h3>Second item</h3>
+                  <p>One active item.</p>
+                </article>
+                <article>
+                  <h3>Third item</h3>
+                  <p>Change event.</p>
+                </article></mdb-fader
+              >
+              <div class="demo-actions">
+                <button
+                  type="button"
+                  data-demo-action="fader-previous"
+                  data-target="demo-fader"
+                >
+                  Previous</button
+                ><button
+                  type="button"
+                  data-demo-action="fader-next"
+                  data-target="demo-fader"
+                >
+                  Next
+                </button>
+              </div>
+              <output
+                class="demo-event"
+                data-event-output="demo-fader"
+                data-events="change"
+                >Waiting…</output
+              >
+            </div>
+            <code class="demo-code"
+              >Methods: previous(), next(), goTo(); event: change.</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>Looping</h2>
+            <div class="demo-stage">
+              <mdb-fader loop current="1" duration="500"
+                ><div>Alpha</div>
+                <div>Beta</div>
+                <div>Gamma</div></mdb-fader
+              >
+            </div>
+            <code class="demo-code"
+              >loop wraps navigation; current chooses the item.</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>Custom motion</h2>
+            <div class="demo-stage">
+              <mdb-fader
+                in-duration="700"
+                out-duration="250"
+                in-transform="translateY(1rem)"
+                out-transform="scale(.96)"
+                easing="ease-out"
+                ><div>Custom entrance</div>
+                <div>Custom exit</div></mdb-fader
+              >
+            </div>
+            <code class="demo-code"
+              >Separate in/out timing, easing, and transforms.</code
+            >
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../main.js"></script>
+  </body>
+</html>

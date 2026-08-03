@@ -1,0 +1,210 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbVideo",
+          "members": [
+            {
+              "kind": "field",
+              "name": "properties",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ src: { type: String }, alt: { type: String, reflect: true }, autoplay: { type: Boolean, reflect: true }, muted: { type: Boolean, reflect: true }, loop: { type: Boolean, reflect: true }, controls: { type: Boolean, reflect: true }, playsinline: { type: Boolean, reflect: true }, captionsSrc: { type: String, attribute: \"captions-src\" }, captionsLang: { type: String, attribute: \"captions-lang\" }, captionsLabel: { type: String, attribute: \"captions-label\" }, isReady: { type: Boolean, attribute: false }, }"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; } .video { display: block; width: 100%; height: 100%; object-fit: cover; } `"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changed"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "play"
+            },
+            {
+              "kind": "method",
+              "name": "pause"
+            },
+            {
+              "kind": "method",
+              "name": "stop"
+            },
+            {
+              "kind": "method",
+              "name": "seek",
+              "parameters": [
+                {
+                  "name": "time"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_rendererNeedsUpdate",
+              "parameters": [
+                {
+                  "name": "changed"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_renderVideo"
+            },
+            {
+              "kind": "method",
+              "name": "_getSourceType",
+              "parameters": [
+                {
+                  "name": "url"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "autoplay",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "muted",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "loop",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "controls",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "playsinline",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "captionsSrc",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "captionsLang",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"en\""
+            },
+            {
+              "kind": "field",
+              "name": "captionsLabel",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Captions\""
+            },
+            {
+              "kind": "field",
+              "name": "isReady",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_renderer",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-video",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbVideo",
+          "declaration": {
+            "name": "MdbVideo",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-video",
+          "declaration": {
+            "name": "MdbVideo",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

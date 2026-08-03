@@ -1,0 +1,193 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbAccessibleMenu",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot"
+            },
+            {
+              "kind": "method",
+              "name": "_onToggleClick",
+              "parameters": [
+                {
+                  "name": "event"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onKeydown",
+              "parameters": [
+                {
+                  "name": "event"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_syncSubmenuState",
+              "parameters": [
+                {
+                  "name": "button"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_getSubmenu",
+              "parameters": [
+                {
+                  "name": "button"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_closeSiblingSubmenus",
+              "parameters": [
+                {
+                  "name": "activeButton"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_closeSubmenu",
+              "parameters": [
+                {
+                  "name": "button"
+                },
+                {
+                  "name": "submenu"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_moveFocusToToggleIfNeeded",
+              "parameters": [
+                {
+                  "name": "button"
+                },
+                {
+                  "name": "submenu"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_getFocusableElements",
+              "parameters": [
+                {
+                  "name": "submenu"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_setSubmenuTabbable",
+              "parameters": [
+                {
+                  "name": "submenu"
+                },
+                {
+                  "name": "isTabbable"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_isInsideClosedNestedSubmenu",
+              "parameters": [
+                {
+                  "name": "element"
+                },
+                {
+                  "name": "rootSubmenu"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_clearAnimationTimeout",
+              "parameters": [
+                {
+                  "name": "submenu"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_animateOpen",
+              "parameters": [
+                {
+                  "name": "submenu"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_animateClose",
+              "parameters": [
+                {
+                  "name": "submenu"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_animationDuration",
+              "type": {
+                "text": "number"
+              },
+              "default": "500"
+            },
+            {
+              "kind": "field",
+              "name": "_animationTimers",
+              "default": "new WeakMap()"
+            },
+            {
+              "kind": "field",
+              "name": "_focusableSelector"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-accessible-menu",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbAccessibleMenu",
+          "declaration": {
+            "name": "MdbAccessibleMenu",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-accessible-menu",
+          "declaration": {
+            "name": "MdbAccessibleMenu",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

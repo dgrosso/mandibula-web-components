@@ -1,0 +1,47 @@
+{
+  "name": "@mandibula/clickable-area",
+  "version": "0.1.0",
+  "description": "Makes a container delegate safely to its primary link.",
+  "type": "module",
+  "module": "./src/index.js",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "custom-elements.json"
+  ],
+  "sideEffects": true,
+  "customElements": "custom-elements.json",
+  "scripts": {
+    "manifest": "cem analyze --globs src/index.js --outdir .",
+    "publint": "publint"
+  },
+  "keywords": [
+    "web-components",
+    "lit",
+    "custom-elements",
+    "mandibula",
+    "clickable-area"
+  ],
+  "author": "Mandíbula contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandibula/mandibula-web-components.git",
+    "directory": "packages/clickable-area"
+  },
+  "bugs": {
+    "url": "https://github.com/mandibula/mandibula-web-components/issues"
+  },
+  "homepage": "https://github.com/mandibula/mandibula-web-components/tree/main/packages/clickable-area#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "dependencies": {
+    "lit": "^3.3.3"
+  }
+}

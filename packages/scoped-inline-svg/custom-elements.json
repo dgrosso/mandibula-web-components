@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbScopedInlineSvg",
+          "members": [
+            {
+              "kind": "field",
+              "name": "properties",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ src: { type: String }, overrideFill: { type: Boolean, attribute: \"override-fill\", reflect: true }, overrideStroke: { type: Boolean, attribute: \"override-stroke\", reflect: true, }, }"
+            },
+            {
+              "kind": "field",
+              "name": "svgCache",
+              "static": true,
+              "default": "new Map()"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { display: inline-block; } svg { display: block; width: 100%; height: 100%; } :host([override-fill]) svg :is(path, rect, circle, ellipse, polygon, polyline, text, tspan, use):not( [fill=\"none\"] )[fill] { fill: currentColor !important; } :host([override-stroke]) svg :is( path, rect, circle, ellipse, polygon, polyline, line, text, tspan, use ):not([stroke=\"none\"])[stroke] { stroke: currentColor !important; } `"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProps"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_loadSvg",
+              "parameters": [
+                {
+                  "name": "src"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_renderScopedSvg",
+              "parameters": [
+                {
+                  "name": "svgText"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_sanitizeSvg",
+              "parameters": [
+                {
+                  "name": "svgText"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_scopeIds",
+              "parameters": [
+                {
+                  "name": "svg"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_ensureViewportAttributes",
+              "parameters": [
+                {
+                  "name": "svg"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_parseSvgLength",
+              "parameters": [
+                {
+                  "name": "value"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "field",
+              "name": "uniqueId",
+              "default": "`svg-${Math.random().toString(36).slice(2, 8)}`"
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "overrideFill",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "overrideStroke",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_svgElement",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            }
+          ],
+          "events": [
+            {
+              "name": "error",
+              "type": {
+                "text": "Event"
+              }
+            },
+            {
+              "name": "load",
+              "type": {
+                "text": "Event"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-scoped-inline-svg",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbScopedInlineSvg",
+          "declaration": {
+            "name": "MdbScopedInlineSvg",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-scoped-inline-svg",
+          "declaration": {
+            "name": "MdbScopedInlineSvg",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

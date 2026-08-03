@@ -1,0 +1,304 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbMediaSlot",
+          "members": [
+            {
+              "kind": "field",
+              "name": "properties",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ src: { type: String }, srcset: { type: String }, sizes: { type: String }, alt: { type: String }, loading: { type: String }, background: { type: Boolean, reflect: true }, mediaType: { type: String, attribute: \"media-type\" }, autoplay: { type: Boolean, reflect: true }, muted: { type: Boolean, reflect: true }, loop: { type: Boolean, reflect: true }, controls: { type: Boolean, reflect: true }, playsinline: { type: Boolean, reflect: true }, svgOverrideFill: { type: Boolean, attribute: \"svg-override-fill\", reflect: true, }, svgOverrideStroke: { type: Boolean, attribute: \"svg-override-stroke\", reflect: true, }, debug: { type: Boolean, reflect: true }, _mediaState: { state: true }, }"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { position: relative; display: flex; width: 100%; aspect-ratio: var( --mdb-media-slot-aspect-ratio, var(--mdb-media-slot-natural-aspect-ratio, auto) ); background: var(--mdb-media-slot-background-color, transparent); overflow: hidden; border-radius: inherit; } :host([background]) { position: absolute; inset: 0; z-index: var(--mdb-media-slot-background-zindex, 0); pointer-events: none; width: 100%; height: 100%; aspect-ratio: auto; } mdb-suspense { display: contents; } img, mdb-scoped-inline-svg, mdb-video { width: 100%; height: 100%; display: block; border-radius: inherit; transition: opacity var(--mdb-media-slot-transition-duration, 300ms) ease; opacity: 0; } img { object-fit: var(--mdb-media-slot-object-fit, cover); object-position: var(--mdb-media-slot-focal-point, center); } mdb-video { &::part(video) { object-fit: var(--mdb-media-slot-object-fit, cover); object-position: var(--mdb-media-slot-focal-point, center); } } img[data-media-state=\"success\"], mdb-scoped-inline-svg[data-media-state=\"success\"], mdb-video[data-media-state=\"success\"] { opacity: 1; } img[data-media-state=\"error\"], mdb-scoped-inline-svg[data-media-state=\"error\"], mdb-video[data-media-state=\"error\"] { opacity: 0.3; } @media (prefers-reduced-motion: reduce) { img, mdb-scoped-inline-svg, mdb-video { transition: none !important; } } :host([debug]) { outline: 1px dashed var(--mdb-media-slot-debug-outline, red); } `"
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changed"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_syncNaturalAspectRatio"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "load"
+            },
+            {
+              "kind": "method",
+              "name": "_renderImage"
+            },
+            {
+              "kind": "method",
+              "name": "_renderVideo"
+            },
+            {
+              "kind": "method",
+              "name": "_setupMedia"
+            },
+            {
+              "kind": "method",
+              "name": "_attachMediaListeners",
+              "parameters": [
+                {
+                  "name": "media"
+                },
+                {
+                  "name": "type"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_detachMediaListeners",
+              "parameters": [
+                {
+                  "name": "media"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_startMediaLoading"
+            },
+            {
+              "kind": "method",
+              "name": "_handleMediaSuccess"
+            },
+            {
+              "kind": "method",
+              "name": "_handleMediaError"
+            },
+            {
+              "kind": "method",
+              "name": "_updateMediaStateAttr"
+            },
+            {
+              "kind": "method",
+              "name": "_mediaType"
+            },
+            {
+              "kind": "method",
+              "name": "_isSvg"
+            },
+            {
+              "kind": "method",
+              "name": "_videoFlags"
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "srcset",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "sizes",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"lazy\""
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "mediaType",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"image\""
+            },
+            {
+              "kind": "field",
+              "name": "autoplay",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "muted",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "loop",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "controls",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "playsinline",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "svgOverrideFill",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "svgOverrideStroke",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "debug",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_mediaState",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"loading\""
+            },
+            {
+              "kind": "field",
+              "name": "_suspenseEl",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_mediaEl",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_onMediaLoad"
+            },
+            {
+              "kind": "field",
+              "name": "_onMediaError"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "width"
+            },
+            {
+              "name": "height"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-media-slot",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbMediaSlot",
+          "declaration": {
+            "name": "MdbMediaSlot",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-media-slot",
+          "declaration": {
+            "name": "MdbMediaSlot",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

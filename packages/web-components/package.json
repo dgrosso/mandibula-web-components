@@ -1,0 +1,55 @@
+{
+  "name": "@mandibula/web-components",
+  "version": "0.1.0",
+  "description": "The complete Mandíbula Web Components collection.",
+  "type": "module",
+  "module": "./src/index.js",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./unresolved.css": "./src/unresolved.css"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "sideEffects": true,
+  "keywords": [
+    "web-components",
+    "lit",
+    "custom-elements",
+    "mandibula"
+  ],
+  "author": "Mandíbula contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandibula/mandibula-web-components.git",
+    "directory": "packages/web-components"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "dependencies": {
+    "@mandibula/accessible-menu": "^0.1.0",
+    "@mandibula/carousel": "^0.1.0",
+    "@mandibula/clickable-area": "^0.1.0",
+    "@mandibula/collapsible": "^0.1.0",
+    "@mandibula/counter": "^0.1.0",
+    "@mandibula/document-preview-button": "^0.1.0",
+    "@mandibula/fader": "^0.1.0",
+    "@mandibula/media-slot": "^0.1.0",
+    "@mandibula/modal": "^0.1.0",
+    "@mandibula/pagination": "^0.1.0",
+    "@mandibula/paper": "^0.1.0",
+    "@mandibula/pointer": "^0.1.0",
+    "@mandibula/post-loop": "^0.1.0",
+    "@mandibula/responsive-text": "^0.1.0",
+    "@mandibula/scoped-inline-svg": "^0.1.0",
+    "@mandibula/spinner": "^0.1.0",
+    "@mandibula/suspense": "^0.1.0",
+    "@mandibula/video-modal-button": "^0.1.0",
+    "@mandibula/video": "^0.1.0"
+  }
+}

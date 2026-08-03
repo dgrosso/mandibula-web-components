@@ -1,0 +1,25 @@
+name: Feature request
+description: Propose a standards-based API or component improvement.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed public API
+      description: Include attributes, properties, events, slots, parts, and accessibility behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Native HTML or existing alternatives considered
+    validations:
+      required: true

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Collapsible examples." />
+    <title>Collapsible · Mandíbula</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="demo-header">
+      <div class="demo-header__inner">
+        <a class="demo-brand" href="../">Mandíbula Web Components</a
+        ><a href="https://github.com/dgrosso/mandibula-web-components"
+          >GitHub</a
+        >
+      </div>
+    </header>
+    <div class="demo-layout">
+      <aside class="demo-sidebar">
+        <nav class="demo-nav" aria-label="Component demos" data-demo-nav></nav>
+      </aside>
+      <main id="content" class="demo-main" tabindex="-1">
+        <header class="demo-intro">
+          <p class="demo-kicker">mdb-collapsible</p>
+          <h1>Collapsible</h1>
+          <p>A content region controlled through open or public methods.</p>
+        </header>
+        <div class="demo-grid">
+          <section class="demo-card">
+            <h2>Method toggle</h2>
+            <div class="demo-stage">
+              <button
+                type="button"
+                data-demo-action="toggle-collapsible"
+                data-target="collapsible-method"
+              >
+                Toggle details</button
+              ><mdb-collapsible id="collapsible-method"
+                ><p>Controlled with toggleCollapsible().</p></mdb-collapsible
+              >
+            </div>
+            <code class="demo-code"
+              >Methods: openCollapsible(), closeCollapsible(),
+              toggleCollapsible().</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>Initially open</h2>
+            <div class="demo-stage">
+              <mdb-collapsible open
+                ><p>This region starts expanded.</p></mdb-collapsible
+              >
+            </div>
+            <code class="demo-code">Property: open (Boolean, reflected).</code>
+          </section>
+          <section class="demo-card">
+            <h2>Custom duration</h2>
+            <div class="demo-stage">
+              <mdb-collapsible
+                style="--mdb-collapsible-animation-duration: 700ms"
+                open
+                ><p>
+                  Themeable motion with reduced-motion support.
+                </p></mdb-collapsible
+              >
+            </div>
+            <code class="demo-code"
+              >Custom property: --mdb-collapsible-animation-duration.</code
+            >
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../main.js"></script>
+  </body>
+</html>

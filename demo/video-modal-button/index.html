@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Video modal button examples." />
+    <title>Video modal button · Mandíbula</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="demo-header">
+      <div class="demo-header__inner">
+        <a class="demo-brand" href="../">Mandíbula Web Components</a
+        ><a href="https://github.com/dgrosso/mandibula-web-components"
+          >GitHub</a
+        >
+      </div>
+    </header>
+    <div class="demo-layout">
+      <aside class="demo-sidebar">
+        <nav class="demo-nav" aria-label="Component demos" data-demo-nav></nav>
+      </aside>
+      <main id="content" class="demo-main" tabindex="-1">
+        <header class="demo-intro">
+          <p class="demo-kicker">mdb-video-modal-button</p>
+          <h1>Video modal button</h1>
+          <p>An authored or default play trigger with lazy modal playback.</p>
+        </header>
+        <div class="demo-grid">
+          <section class="demo-card">
+            <h2>Default trigger</h2>
+            <div class="demo-stage">
+              <mdb-video-modal-button
+                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                controls
+                play-label="Play flower video"
+              ></mdb-video-modal-button>
+            </div>
+            <code class="demo-code">Options: src, controls, play-label.</code>
+          </section>
+          <section class="demo-card">
+            <h2>Authored trigger</h2>
+            <div class="demo-stage">
+              <mdb-video-modal-button
+                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                controls
+                ><button slot="trigger" type="button">
+                  Watch the short film
+                </button></mdb-video-modal-button
+              >
+            </div>
+            <code class="demo-code"
+              >slot=trigger replaces the default button.</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>Custom content</h2>
+            <div class="demo-stage">
+              <mdb-video-modal-button
+                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                controls
+                ><span slot="play-button-content" aria-hidden="true"
+                  >▶ Watch</span
+                ></mdb-video-modal-button
+              >
+            </div>
+            <code class="demo-code"
+              >slot=play-button-content customizes the visual.</code
+            >
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../main.js"></script>
+  </body>
+</html>

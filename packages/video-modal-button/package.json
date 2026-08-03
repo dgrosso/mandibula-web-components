@@ -1,0 +1,49 @@
+{
+  "name": "@mandibula/video-modal-button",
+  "version": "0.1.0",
+  "description": "Video trigger backed by the modal component.",
+  "type": "module",
+  "module": "./src/index.js",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./styles.css": "./src/styles.css"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "custom-elements.json"
+  ],
+  "sideEffects": true,
+  "customElements": "custom-elements.json",
+  "scripts": {
+    "manifest": "cem analyze --globs src/index.js --outdir .",
+    "publint": "publint"
+  },
+  "keywords": [
+    "web-components",
+    "lit",
+    "custom-elements",
+    "mandibula",
+    "video-modal-button"
+  ],
+  "author": "Mandíbula contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandibula/mandibula-web-components.git",
+    "directory": "packages/video-modal-button"
+  },
+  "bugs": {
+    "url": "https://github.com/mandibula/mandibula-web-components/issues"
+  },
+  "homepage": "https://github.com/mandibula/mandibula-web-components/tree/main/packages/video-modal-button#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "dependencies": {
+    "lit": "^3.3.3",
+    "@mandibula/modal": "^0.1.0"
+  }
+}

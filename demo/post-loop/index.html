@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Post loop examples." />
+    <title>Post loop · Mandíbula</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="demo-header">
+      <div class="demo-header__inner">
+        <a class="demo-brand" href="../">Mandíbula Web Components</a
+        ><a href="https://github.com/dgrosso/mandibula-web-components"
+          >GitHub</a
+        >
+      </div>
+    </header>
+    <div class="demo-layout">
+      <aside class="demo-sidebar">
+        <nav class="demo-nav" aria-label="Component demos" data-demo-nav></nav>
+      </aside>
+      <main id="content" class="demo-main" tabindex="-1">
+        <header class="demo-intro">
+          <p class="demo-kicker">mdb-post-loop</p>
+          <h1>Post loop</h1>
+          <p>
+            Coordinates fetch-driven results, filters, selections, loading, and
+            pagination.
+          </p>
+        </header>
+        <div class="demo-grid">
+          <section class="demo-card">
+            <h2>Static shell</h2>
+            <div class="demo-stage">
+              <mdb-post-loop
+                disable-fetch
+                initial-selections='{"topic":["accessibility"]}'
+                ><div data-ajax-post-loop="posts">
+                  <ul class="demo-posts">
+                    <li>Accessible menus</li>
+                    <li>Native dialogs</li>
+                  </ul>
+                </div></mdb-post-loop
+              >
+            </div>
+            <code class="demo-code"
+              >disable-fetch supports server-rendered results.</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>Local filters</h2>
+            <div class="demo-stage">
+              <mdb-post-loop disable-fetch
+                ><mdb-post-loop-filters
+                  filter-key="topic"
+                  all-label="All topics"
+                  options='[{"label":"Accessibility","value":"accessibility"},{"label":"Performance","value":"performance"}]'
+                ></mdb-post-loop-filters>
+                <div data-ajax-post-loop="posts">
+                  <p>Listen for filter events to update results.</p>
+                </div></mdb-post-loop
+              >
+            </div>
+            <code class="demo-code"
+              >Filters support local options or taxonomy loading.</code
+            >
+          </section>
+          <section class="demo-card">
+            <h2>Pagination child</h2>
+            <div class="demo-stage">
+              <mdb-post-loop disable-fetch
+                ><div data-ajax-post-loop="posts"><p>Page results</p></div>
+                <mdb-post-loop-pagination
+                  limit="5"
+                  mode="replace"
+                ></mdb-post-loop-pagination
+              ></mdb-post-loop>
+            </div>
+            <code class="demo-code">Pagination emits mdb-page-selected.</code>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,171 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdbPagination",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot"
+            },
+            {
+              "kind": "method",
+              "name": "_onClick",
+              "parameters": [
+                {
+                  "name": "event"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "pages"
+            },
+            {
+              "kind": "field",
+              "name": "current"
+            },
+            {
+              "kind": "field",
+              "name": "circular"
+            },
+            {
+              "kind": "method",
+              "name": "_handlePrevious"
+            },
+            {
+              "kind": "method",
+              "name": "_handleNext"
+            },
+            {
+              "kind": "method",
+              "name": "_getPaginationControl",
+              "parameters": [
+                {
+                  "name": "target"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_emit",
+              "parameters": [
+                {
+                  "name": "type"
+                },
+                {
+                  "name": "detail",
+                  "default": "{}"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_renderIndicators"
+            },
+            {
+              "kind": "method",
+              "name": "_updateIndicators"
+            },
+            {
+              "kind": "method",
+              "name": "_updateDisabled"
+            },
+            {
+              "kind": "method",
+              "name": "_upgradeProperty",
+              "parameters": [
+                {
+                  "name": "prop"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_pages",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_current",
+              "type": {
+                "text": "number"
+              },
+              "default": "1"
+            },
+            {
+              "kind": "field",
+              "name": "_circular",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "innerHTML",
+              "default": "` <nav part=\"nav\" role=\"navigation\" aria-label=\"Pagination\"> <slot name=\"previous\" part=\"previous\"></slot> <div part=\"indicators\" role=\"list\"></div> <slot name=\"next\" part=\"next\"></slot> </nav> `"
+            },
+            {
+              "kind": "field",
+              "name": "_indicatorsContainer"
+            }
+          ],
+          "events": [
+            {
+              "name": "type",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "pages"
+            },
+            {
+              "name": "current"
+            },
+            {
+              "name": "circular"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-pagination",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbPagination",
+          "declaration": {
+            "name": "MdbPagination",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-pagination",
+          "declaration": {
+            "name": "MdbPagination",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}
