@@ -1,17 +1,16 @@
 import { html } from "lit";
 import "@mandibula/scoped-inline-svg";
+import { componentDescriptions, scopedInlineSvgArgTypes } from "./arg-types.js";
 import { storyCard } from "./helpers.js";
 
 const meta = {
   title: "Mandíbula/Scoped inline SVG",
   component: "mdb-scoped-inline-svg",
   tags: ["autodocs"],
+  argTypes: scopedInlineSvgArgTypes,
   parameters: {
     docs: {
-      description: {
-        component:
-          "Fetches, sanitizes, scopes identifiers, and exposes inline SVG.",
-      },
+      description: { component: componentDescriptions.scopedInlineSvg },
     },
   },
 };

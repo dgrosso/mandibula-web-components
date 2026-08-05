@@ -1,17 +1,16 @@
 import { html } from "lit";
 import "@mandibula/fader";
+import { componentDescriptions, faderArgTypes } from "./arg-types.js";
 import { showEvent, storyCard } from "./helpers.js";
 
 const meta = {
   title: "Mandíbula/Fader",
   component: "mdb-fader",
   tags: ["autodocs"],
+  argTypes: faderArgTypes,
   parameters: {
     docs: {
-      description: {
-        component:
-          "A keyboard-operable fading carousel with configurable transitions.",
-      },
+      description: { component: componentDescriptions.fader },
     },
   },
 };

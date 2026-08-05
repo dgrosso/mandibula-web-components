@@ -1,5 +1,6 @@
 import { html } from "lit";
 import "@mandibula/video";
+import { componentDescriptions, videoArgTypes } from "./arg-types.js";
 import { storyCard } from "./helpers.js";
 
 const videoSrc =
@@ -9,11 +10,10 @@ const meta = {
   title: "Mandíbula/Video",
   component: "mdb-video",
   tags: ["autodocs"],
+  argTypes: videoArgTypes,
   parameters: {
     docs: {
-      description: {
-        component: "One API for native video, YouTube, and Vimeo playback.",
-      },
+      description: { component: componentDescriptions.video },
     },
   },
 };

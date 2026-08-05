@@ -1,6 +1,7 @@
 import { html } from "lit";
 import "@mandibula/suspense";
 import "@mandibula/spinner";
+import { componentDescriptions, suspenseArgTypes } from "./arg-types.js";
 import { storyCard } from "./helpers.js";
 
 const changeState = (method) => (event) => {
@@ -20,12 +21,10 @@ const meta = {
   title: "Mandíbula/Suspense",
   component: "mdb-suspense",
   tags: ["autodocs"],
+  argTypes: suspenseArgTypes,
   parameters: {
     docs: {
-      description: {
-        component:
-          "Idle, delayed loading, success, error, fallback, and debug states.",
-      },
+      description: { component: componentDescriptions.suspense },
     },
   },
 };

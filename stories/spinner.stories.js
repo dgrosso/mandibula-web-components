@@ -1,17 +1,16 @@
 import { html } from "lit";
 import "@mandibula/spinner";
+import { componentDescriptions, spinnerArgTypes } from "./arg-types.js";
 import { storyCard } from "./helpers.js";
 
 const meta = {
   title: "Mandíbula/Spinner",
   component: "mdb-spinner",
   tags: ["autodocs"],
+  argTypes: spinnerArgTypes,
   parameters: {
     docs: {
-      description: {
-        component:
-          "A CSS loading indicator with sizing, color, template, and reduced-motion options.",
-      },
+      description: { component: componentDescriptions.spinner },
     },
   },
 };

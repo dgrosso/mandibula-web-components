@@ -1,17 +1,16 @@
 import { html } from "lit";
 import "@mandibula/media-slot";
+import { componentDescriptions, mediaSlotArgTypes } from "./arg-types.js";
 import { storyCard } from "./helpers.js";
 
 const meta = {
   title: "Mandíbula/Media slot",
   component: "mdb-media-slot",
   tags: ["autodocs"],
+  argTypes: mediaSlotArgTypes,
   parameters: {
     docs: {
-      description: {
-        component:
-          "Responsive image, sanitized SVG, and video rendering with suspense.",
-      },
+      description: { component: componentDescriptions.mediaSlot },
     },
   },
 };

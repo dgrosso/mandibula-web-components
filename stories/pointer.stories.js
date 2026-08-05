@@ -1,5 +1,6 @@
 import { html } from "lit";
 import "@mandibula/pointer";
+import { componentDescriptions } from "./arg-types.js";
 import { storyCard } from "./helpers.js";
 
 const meta = {
@@ -8,9 +9,7 @@ const meta = {
   tags: ["autodocs"],
   parameters: {
     docs: {
-      description: {
-        component: "Contextual decorative content for fine mouse pointers.",
-      },
+      description: { component: componentDescriptions.pointer },
     },
   },
 };

@@ -7,7 +7,7 @@ const allowedHosts = process.env.STORYBOOK_ALLOWED_HOSTS?.split(",")
 /** @type {import('@storybook/web-components-vite').StorybookConfig} */
 const config = {
   stories: ["../stories/**/*.stories.js"],
-  addons: [],
+  addons: ["@storybook/addon-docs"],
   framework: {
     name: "@storybook/web-components-vite",
     options: {},
