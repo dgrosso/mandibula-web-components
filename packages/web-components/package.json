@@ -1,6 +1,6 @@
 {
   "name": "@mandibula/web-components",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "The complete Mandíbula Web Components collection.",
   "type": "module",
   "module": "./src/index.js",
@@ -35,7 +35,7 @@
     "@mandibula/fader": "^0.1.0",
     "@mandibula/media-slot": "^0.1.0",
     "@mandibula/pointer": "^0.1.0",
-    "@mandibula/responsive-text": "^0.1.0",
+    "@mandibula/responsive-text": "^0.2.0",
     "@mandibula/scoped-inline-svg": "^0.1.0",
     "@mandibula/spinner": "^0.1.0",
     "@mandibula/suspense": "^0.1.0",
