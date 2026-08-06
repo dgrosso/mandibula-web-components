@@ -24,7 +24,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mandibula/mandibula-web-components.git",
+    "url": "git+https://github.com/dgrosso/mandibula-web-components.git",
     "directory": "packages/web-components"
   },
   "publishConfig": {

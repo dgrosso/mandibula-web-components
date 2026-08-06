@@ -30,3 +30,33 @@ jobs:
         uses: changesets/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Plan release assets
+        id: release-plan
+        run: npm run release:plan -- "${{ github.event.before }}"
+      - name: Build GitHub Release packages
+        if: steps.release-plan.outputs.release_required == 'true'
+        run: npm run release:pack:github -- --tag "${{ steps.release-plan.outputs.release_tag }}" --output release-artifacts
+      - name: Write release notes
+        if: steps.release-plan.outputs.release_required == 'true'
+        env:
+          RELEASE_TAG: ${{ steps.release-plan.outputs.release_tag }}
+        run: |
+          {
+            echo "Packages in $RELEASE_TAG:"
+            jq -r '.packages[] | "- `\(.name)@\(.version)`"' release-artifacts/release-manifest.json
+            echo
+            echo "Install individual packages with:"
+            jq -r '.packages[] | "- `\(.installCommand)`"' release-artifacts/release-manifest.json
+          } > release-artifacts/release-notes.md
+      - name: Create or update GitHub Release
+        if: steps.release-plan.outputs.release_required == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ steps.release-plan.outputs.release_tag }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release edit "$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file release-artifacts/release-notes.md
+          else
+            gh release create "$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file release-artifacts/release-notes.md --target "${{ github.sha }}"
+          fi
+          gh release upload "$RELEASE_TAG" release-artifacts/*.tgz release-artifacts/release-manifest.json --clobber

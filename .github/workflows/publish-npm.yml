@@ -1,0 +1,44 @@
+name: Publish npm packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Ref containing the Changesets version commit to publish
+        required: true
+        default: development
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run release:pack:npm -- --output npm-preview
+      - name: Verify npm authentication and @mandibula scope access
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          test -n "$NODE_AUTH_TOKEN" || { echo "NPM_TOKEN is required for explicit npm publication." >&2; exit 1; }
+          npm whoami --registry=https://registry.npmjs.org
+          npm access ls-packages --scope=@mandibula --registry=https://registry.npmjs.org >/dev/null || {
+            echo "The authenticated npm account cannot inspect or publish the @mandibula scope." >&2
+            exit 1
+          }
+      - name: Publish with Changesets
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run release:publish:npm

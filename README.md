@@ -10,6 +10,37 @@ Framework-agnostic custom elements built with Lit. Every component is an indepen
 npm install @mandibula/spinner
 ```
 
+The project supports two independent distribution targets. GitHub Release tarballs are usable even when a package has not been published to npm; npm installation works only for packages that maintainers have explicitly published under the `@mandibula` scope.
+
+### Install from a GitHub Release
+
+Release assets use the `mandibula-<package>-<version>.tgz` filename convention. Find the release tag and exact asset filename in the repository’s Releases page or its `release-manifest.json`, then install the tarball:
+
+```sh
+npm install https://github.com/dgrosso/mandibula-web-components/releases/download/<release-tag>/mandibula-spinner-<version>.tgz
+npm install https://github.com/dgrosso/mandibula-web-components/releases/download/<release-tag>/mandibula-web-components-<version>.tgz
+```
+
+GitHub artifacts rewrite internal `@mandibula/*` dependencies to tarballs from the same release, so the aggregate package does not depend on npm availability. A lockfile pins those GitHub tarball URLs.
+
+### Install from npm
+
+```sh
+npm install @mandibula/spinner
+npm install @mandibula/web-components
+```
+
+Npm artifacts retain normal semver dependencies between `@mandibula/*` packages. Their resolved versions are pinned in a lockfile. Publishing requires authorization to the `@mandibula` npm scope; no claim is made here that every package is currently available on npm.
+
+Import an individual package or the aggregate collection as follows:
+
+```js
+import "@mandibula/spinner";
+import "@mandibula/web-components";
+```
+
+The same imports work after installing the corresponding GitHub tarball. GitHub and npm package metadata share the checked-in workspace versions, while only temporary GitHub packaging metadata contains release asset URLs.
+
 ```html
 <script type="module">
   import "https://esm.sh/@mandibula/spinner";

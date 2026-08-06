@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "check": "npm run format:check && npm run lint && npm test && npm run manifest && npm run publint && npm run demo:build",
+    "check": "npm run format:check && npm run lint && npm test && npm run release:test && npm run manifest && npm run publint && npm run release:validate && npm run demo:build",
     "storybook": "storybook dev -p 6006",
     "demo": "npm run storybook",
     "demo:build": "npm run demo:validate && storybook build --output-dir site",
@@ -25,7 +25,12 @@
     "test:watch": "npm run test:browser -- --watch",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release:plan": "node scripts/release-plan.mjs",
+    "release:pack:github": "node scripts/release-pack.mjs github",
+    "release:pack:npm": "node scripts/release-pack.mjs npm",
+    "release:validate": "node scripts/release-validate.mjs",
+    "release:test": "node --test tests/release/*.test.mjs",
+    "release:publish:npm": "changeset publish"
   },
   "engines": {
     "node": ">=22.12"

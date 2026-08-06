@@ -31,13 +31,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mandibula/mandibula-web-components.git",
+    "url": "git+https://github.com/dgrosso/mandibula-web-components.git",
     "directory": "packages/responsive-text"
   },
   "bugs": {
-    "url": "https://github.com/mandibula/mandibula-web-components/issues"
+    "url": "https://github.com/dgrosso/mandibula-web-components/issues"
   },
-  "homepage": "https://github.com/mandibula/mandibula-web-components/tree/main/packages/responsive-text#readme",
+  "homepage": "https://github.com/dgrosso/mandibula-web-components/tree/development/packages/responsive-text#readme",
   "publishConfig": {
     "access": "public",
     "provenance": true
