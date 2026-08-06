@@ -108,4 +108,15 @@ STORYBOOK_ALLOWED_HOSTS=100.119.211.103 npm run storybook -- --host 0.0.0.0 --no
 
 Package releases use Changesets. Public APIs are described by generated Custom Elements Manifests.
 
+### Pre-1.0 release policy
+
+During initial development, public packages remain in the `0.x` range. This repository’s chosen convention is:
+
+- breaking changes before `1.0.0` use a `minor` Changeset;
+- backward-compatible features also use `minor`;
+- fixes use `patch`;
+- `major` Changesets are blocked for packages whose current version is below `1.0.0`.
+
+Moving to `1.0.0` requires an explicit release-policy decision and a corresponding validator update. The repository is not currently using Changesets prerelease mode or versions such as `0.2.0-beta.0`.
+
 The project is licensed under MIT.

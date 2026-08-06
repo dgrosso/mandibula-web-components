@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "check": "npm run format:check && npm run lint && npm test && npm run release:test && npm run manifest && npm run publint && npm run release:validate && npm run demo:build",
+    "check": "npm run format:check && npm run lint && npm run changeset:validate && npm test && npm run release:test && npm run manifest && npm run publint && npm run release:validate && npm run demo:build",
     "storybook": "storybook dev -p 6006",
     "demo": "npm run storybook",
     "demo:build": "npm run demo:validate && storybook build --output-dir site",
@@ -24,6 +24,7 @@
     "test:ssr": "node scripts/ssr-smoke.mjs",
     "test:watch": "npm run test:browser -- --watch",
     "changeset": "changeset",
+    "changeset:validate": "node scripts/validate-changesets.mjs",
     "version-packages": "changeset version",
     "release:plan": "node scripts/release-plan.mjs",
     "release:pack:github": "node scripts/release-pack.mjs github",
