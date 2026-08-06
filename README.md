@@ -53,6 +53,7 @@ See [framework interoperability](docs/frameworks.md) for React, Vue, and plain H
 | `@mandibula/fader`             | `mdb-fader`             |
 | `@mandibula/media-slot`        | `mdb-media-slot`        |
 | `@mandibula/pointer`           | `mdb-pointer`           |
+| `@mandibula/responsive-text`   | `mdb-responsive-text`   |
 | `@mandibula/scoped-inline-svg` | `mdb-scoped-inline-svg` |
 | `@mandibula/spinner`           | `mdb-spinner`           |
 | `@mandibula/suspense`          | `mdb-suspense`          |

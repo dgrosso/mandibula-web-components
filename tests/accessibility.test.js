@@ -22,6 +22,10 @@ const cases = [
   ],
   ["pointer", () => html`<mdb-pointer aria-hidden="true"></mdb-pointer>`],
   [
+    "responsive-text",
+    () => html`<mdb-responsive-text>Responsive text</mdb-responsive-text>`,
+  ],
+  [
     "scoped-inline-svg",
     () =>
       html`<mdb-scoped-inline-svg aria-hidden="true"></mdb-scoped-inline-svg>`,

@@ -156,6 +156,28 @@ export const scopedInlineSvgArgTypes = {
   },
 };
 
+export const responsiveTextArgTypes = {
+  minSize: {
+    name: "min-size",
+    ...stringAttribute("Minimum font size used by clamp().", '"1rem"'),
+  },
+  fluidSize: {
+    name: "fluid-size",
+    ...stringAttribute(
+      "Fluid preferred font size used between the minimum and maximum values.",
+      '"5vw"'
+    ),
+  },
+  maxSize: {
+    name: "max-size",
+    ...stringAttribute("Maximum font size used by clamp().", '"3rem"'),
+  },
+  lineHeight: {
+    name: "line-height",
+    ...stringAttribute("Line height applied to the slotted text.", '"1.2"'),
+  },
+};
+
 export const spinnerArgTypes = {
   template: stringAttribute(
     "ID of a document template element used to replace the CSS indicator.",
@@ -213,6 +235,8 @@ export const componentDescriptions = {
     'Contextual decorative effect for fine pointers. It has no public attributes of its own: configure it with data-pointer="template:value" on target elements and templates with an mdb-pointer-{type} ID. It is disabled for touch and prefers-reduced-motion.',
   scopedInlineSvg:
     "Fetches, sanitizes, and renders inline SVG while scoping its internal IDs. Public attributes are src, override-fill, and override-stroke. Emits load and error.",
+  responsiveText:
+    "Inline text component with a fluid font size calculated by CSS clamp(). The size scales between min-size and max-size using fluid-size as the preferred value. Supports custom property overrides for design-system integration.",
   spinner:
     "CSS loading indicator that respects prefers-reduced-motion. Its only attribute is template; customize size, color, background, and border width with --mdb-spinner-size, --mdb-spinner-color, --mdb-spinner-bg, and --mdb-spinner-border-width.",
   suspense:

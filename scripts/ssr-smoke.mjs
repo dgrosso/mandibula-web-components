@@ -2,6 +2,7 @@ const packages = [
   "fader",
   "media-slot",
   "pointer",
+  "responsive-text",
   "scoped-inline-svg",
   "spinner",
   "suspense",

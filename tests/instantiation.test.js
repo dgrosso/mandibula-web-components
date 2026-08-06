@@ -5,6 +5,7 @@ const elements = [
   "mdb-fader",
   "mdb-media-slot",
   "mdb-pointer",
+  "mdb-responsive-text",
   "mdb-scoped-inline-svg",
   "mdb-spinner",
   "mdb-suspense",

@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Text that scales fluidly between a minimum and maximum font size.",
+          "name": "MdbResponsiveText",
+          "members": [
+            {
+              "kind": "field",
+              "name": "properties",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ minSize: { type: String, reflect: true, attribute: \"min-size\" }, fluidSize: { type: String, reflect: true, attribute: \"fluid-size\" }, maxSize: { type: String, reflect: true, attribute: \"max-size\" }, lineHeight: { type: String, reflect: true, attribute: \"line-height\" }, }"
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css` :host { --mdb-responsive-text-min-size: 1rem; --mdb-responsive-text-fluid-size: 5vw; --mdb-responsive-text-max-size: 3rem; --mdb-responsive-text-line-height: 1.2; display: inline; font-size: clamp( var(--mdb-responsive-text-min-size), var(--mdb-responsive-text-fluid-size), var(--mdb-responsive-text-max-size) ); line-height: var(--mdb-responsive-text-line-height); } `"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changed"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_setStyleVariable",
+              "parameters": [
+                {
+                  "name": "name"
+                },
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "fallback"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "field",
+              "name": "minSize",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"1rem\""
+            },
+            {
+              "kind": "field",
+              "name": "fluidSize",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"5vw\""
+            },
+            {
+              "kind": "field",
+              "name": "maxSize",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"3rem\""
+            },
+            {
+              "kind": "field",
+              "name": "lineHeight",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"1.2\""
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mdb-responsive-text",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdbResponsiveText",
+          "declaration": {
+            "name": "MdbResponsiveText",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mdb-responsive-text",
+          "declaration": {
+            "name": "MdbResponsiveText",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}
