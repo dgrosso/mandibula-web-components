@@ -86,6 +86,7 @@ See [framework interoperability](docs/frameworks.md) for React, Vue, and plain H
 | `@mandibula/pointer`           | `mdb-pointer`           |
 | `@mandibula/responsive-text`   | `mdb-responsive-text`   |
 | `@mandibula/scoped-inline-svg` | `mdb-scoped-inline-svg` |
+| `@mandibula/slider`            | `mdb-slider`            |
 | `@mandibula/spinner`           | `mdb-spinner`           |
 | `@mandibula/suspense`          | `mdb-suspense`          |
 | `@mandibula/video`             | `mdb-video`             |
