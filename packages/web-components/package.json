@@ -37,6 +37,7 @@
     "@mandibula/pointer": "^0.1.0",
     "@mandibula/responsive-text": "^0.1.0",
     "@mandibula/scoped-inline-svg": "^0.1.0",
+    "@mandibula/slider": "^0.1.0",
     "@mandibula/spinner": "^0.1.0",
     "@mandibula/suspense": "^0.1.0",
     "@mandibula/video": "^0.1.0"
