@@ -1,0 +1,48 @@
+{
+  "name": "@mandibula/slider",
+  "version": "0.1.0",
+  "description": "Accessible native scroll-snap content slider.",
+  "type": "module",
+  "module": "./src/index.js",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "custom-elements.json"
+  ],
+  "sideEffects": true,
+  "customElements": "custom-elements.json",
+  "scripts": {
+    "manifest": "cem analyze --globs src/index.js --outdir .",
+    "publint": "publint"
+  },
+  "keywords": [
+    "web-components",
+    "lit",
+    "custom-elements",
+    "mandibula",
+    "slider",
+    "scroll-snap"
+  ],
+  "author": "Mandíbula contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgrosso/mandibula-web-components.git",
+    "directory": "packages/slider"
+  },
+  "bugs": {
+    "url": "https://github.com/dgrosso/mandibula-web-components/issues"
+  },
+  "homepage": "https://github.com/dgrosso/mandibula-web-components/tree/development/packages/slider#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "dependencies": {
+    "lit": "^3.3.3"
+  }
+}
