@@ -4,6 +4,7 @@ const packages = [
   "pointer",
   "responsive-text",
   "scoped-inline-svg",
+  "slider",
   "spinner",
   "suspense",
   "video",
