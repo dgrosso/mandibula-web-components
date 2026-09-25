@@ -78,6 +78,21 @@ export const faderArgTypes = {
   ),
 };
 
+export const sliderArgTypes = {
+  current: numberAttribute(
+    "Index of the active slide. The first slide is 0.",
+    "0"
+  ),
+  loop: booleanAttribute(
+    "Allows imperative previous/next navigation to wrap.",
+    "false"
+  ),
+  label: stringAttribute(
+    "Accessible name for assistive technology users.",
+    '"Carousel"'
+  ),
+};
+
 export const mediaSlotArgTypes = {
   src: stringAttribute("Image, SVG, or video URL.", '""'),
   srcset: stringAttribute(
@@ -229,6 +244,8 @@ export const videoArgTypes = {
 export const componentDescriptions = {
   fader:
     "Accessible, keyboard-operable carousel that transitions between its child items. Public attributes: current, loop, duration, easing, in-duration, out-duration, in-easing, out-easing, in-transform, out-transform, and label. Methods: next(), prev(), goTo(index), and clear(). Emits change.",
+  slider:
+    "Accessible horizontal carousel built on native scrolling and CSS scroll snap. Public attributes: current, loop, and label. Methods: next(), prev(), and goTo(index). Emits change.",
   mediaSlot:
     "Responsive container for images, sanitized SVG, and video with loading and error states. The table below documents all attributes, including width and height for the aspect ratio. Supports the loader and fallback slots.",
   pointer:
