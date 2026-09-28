@@ -100,6 +100,19 @@ test("discovers Mandíbula packages from workspace metadata", async (t) => {
   await writeFile(packageManifestPath, JSON.stringify(packageManifest));
   await writeFile(join(directory, "src", "index.js"), "export {};\n");
 
+  await assert.rejects(
+    discoverBrowserBundlePackages(root),
+    /target "\.\/src\/missing-entry\.js" selected for \. does not resolve to a file/
+  );
+  await writeFile(
+    packageManifestPath,
+    JSON.stringify({
+      ...packageManifest,
+      exports: {
+        ".": { browser: ["./src/index.js", "./src/missing-entry.js"] },
+      },
+    })
+  );
   assert.deepEqual(await discoverBrowserBundlePackages(root), [
     {
       name: "@mandibula/metadata-name",
@@ -109,10 +122,6 @@ test("discovers Mandíbula packages from workspace metadata", async (t) => {
       rootExport: "./src/index.js",
     },
   ]);
-  assert.equal(
-    (await discoverBrowserBundlePackages(root))[0].rootExport,
-    "./src/index.js"
-  );
   await writeFile(
     packageManifestPath,
     JSON.stringify({
@@ -127,7 +136,7 @@ test("discovers Mandíbula packages from workspace metadata", async (t) => {
   );
   await assert.rejects(
     discoverBrowserBundlePackages(root),
-    /must expose a compatible public root/
+    /target "\.\/src\/missing-entry\.js" selected for \. does not resolve to a file/
   );
 });
 
@@ -189,6 +198,92 @@ test("conditional export null blocks active browser targets terminally", async (
       },
     },
     "./src/fallback.js"
+  );
+});
+
+test("export arrays stop at null and fall through only on undefined", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "mandibula-export-arrays-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const checkExports = async (exports, expected) => {
+    await createWorkspace(root, "array-fixture", exports, {
+      "src/fallback.js": "export {};\n",
+      "src/first.js": "export {};\n",
+    });
+    if (expected) {
+      const [pkg] = await discoverBrowserBundlePackages(root);
+      assert.equal(pkg.rootExport, expected);
+    } else {
+      await assert.rejects(
+        discoverBrowserBundlePackages(root),
+        /must expose a compatible public root/
+      );
+    }
+  };
+
+  await checkExports({ ".": [null, "./src/fallback.js"] }, null);
+  await checkExports(
+    {
+      ".": [
+        { browser: null, default: "./src/fallback.js" },
+        "./src/fallback.js",
+      ],
+    },
+    null
+  );
+  await checkExports(
+    {
+      ".": [
+        { browser: { "custom-condition": "./src/missing.js" } },
+        "./src/fallback.js",
+      ],
+    },
+    "./src/fallback.js"
+  );
+  await checkExports(
+    { ".": ["./src/first.js", "./src/fallback.js"] },
+    "./src/first.js"
+  );
+});
+
+test("rejects mixed package exports key styles and accepts valid maps", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "mandibula-export-map-shapes-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const checkExports = async (exports, expected, errorPattern) => {
+    await createWorkspace(root, "shape-fixture", exports, {
+      "src/index.js": "export {};\n",
+      "src/subpath.js": "export {};\n",
+      "src/browser.js": "export {};\n",
+    });
+    if (errorPattern) {
+      await assert.rejects(discoverBrowserBundlePackages(root), errorPattern);
+    } else {
+      const [pkg] = await discoverBrowserBundlePackages(root);
+      assert.equal(pkg.rootExport, expected);
+    }
+  };
+
+  await checkExports(
+    { ".": "./src/index.js", browser: "./src/browser.js" },
+    null,
+    /do not mix subpath keys and condition keys/
+  );
+  await checkExports(
+    { "./subpath": "./src/subpath.js", browser: "./src/browser.js" },
+    null,
+    /do not mix subpath keys and condition keys/
+  );
+  await checkExports(
+    { ".": "./src/index.js", "./subpath": "./src/subpath.js" },
+    "./src/index.js"
+  );
+  await checkExports(
+    { browser: "./src/browser.js", default: "./src/index.js" },
+    "./src/browser.js"
+  );
+  await checkExports(
+    { ".": "../outside.js" },
+    null,
+    /Invalid package exports target.*only relative file targets/
   );
 });
 

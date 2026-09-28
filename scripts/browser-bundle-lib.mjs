@@ -44,40 +44,131 @@ function isWithin(parent, candidate) {
   );
 }
 
-function conditionalTargets(value) {
-  if (value === null) return { targets: [], blocked: true };
-  if (typeof value === "string") return { targets: [value], blocked: false };
+function unresolvedExport() {
+  return { kind: "undefined" };
+}
+
+function conditionalTarget(value) {
+  if (value === undefined) return unresolvedExport();
+  if (value === null) return { kind: "blocked" };
+  if (typeof value === "string") return { kind: "target", target: value };
   if (Array.isArray(value)) {
-    const targets = [];
     for (const candidate of value) {
-      const result = conditionalTargets(candidate);
-      if (result.targets.length) targets.push(...result.targets);
+      const result = conditionalTarget(candidate);
+      if (result.kind !== "undefined") return result;
     }
-    return { targets, blocked: false };
+    return unresolvedExport();
   }
-  if (typeof value !== "object") return { targets: [], blocked: false };
+  if (!value || typeof value !== "object") {
+    throw new Error(
+      "Invalid package exports target: expected a relative target string, null, an array, or a condition object."
+    );
+  }
   for (const [condition, candidate] of Object.entries(value)) {
     if (!EXPORT_CONDITIONS.has(condition)) continue;
-    const result = conditionalTargets(candidate);
-    if (result.blocked || result.targets.length) return result;
+    const result = conditionalTarget(candidate);
+    if (result.kind !== "undefined") return result;
   }
-  return { targets: [], blocked: false };
+  return unresolvedExport();
+}
+
+function isSubpathKey(key) {
+  return key.startsWith(".");
+}
+
+function validateSubpathKey(key) {
+  if (
+    !isSubpathKey(key) ||
+    (key !== "." && !key.startsWith("./")) ||
+    (key.match(/\*/g)?.length ?? 0) > 1 ||
+    key.includes("\\") ||
+    key.includes("?") ||
+    key.includes("#")
+  ) {
+    throw new Error(`Unsupported package exports subpath key: ${key}.`);
+  }
+  const segments = key === "." ? [] : key.slice(2).split("/");
+  if (
+    segments.some((segment) => {
+      let decoded = segment;
+      try {
+        decoded = decodeURIComponent(segment);
+      } catch {
+        return true;
+      }
+      return (
+        segment.length === 0 ||
+        segment.includes("%") ||
+        decoded === "." ||
+        decoded === ".." ||
+        decoded.toLowerCase() === "node_modules" ||
+        decoded.includes("/") ||
+        decoded.includes("\\")
+      );
+    })
+  ) {
+    throw new Error(`Unsupported package exports subpath key: ${key}.`);
+  }
+}
+
+function validateConditionalShape(value) {
+  if (
+    value === null ||
+    typeof value === "string" ||
+    typeof value === "undefined"
+  ) {
+    return;
+  }
+  if (Array.isArray(value)) {
+    value.forEach(validateConditionalShape);
+    return;
+  }
+  if (!value || typeof value !== "object") {
+    throw new Error(
+      "Invalid package exports target: expected a relative target string, null, an array, or a condition object."
+    );
+  }
+  for (const [condition, candidate] of Object.entries(value)) {
+    if (isSubpathKey(condition)) {
+      throw new Error(
+        `Invalid package exports configuration: condition objects cannot contain subpath key ${condition}.`
+      );
+    }
+    validateConditionalShape(candidate);
+  }
 }
 
 function exportValue(exportsField, subpath) {
-  if (
-    typeof exportsField === "string" ||
-    Array.isArray(exportsField) ||
-    (exportsField &&
-      typeof exportsField === "object" &&
-      !Object.keys(exportsField).some((key) => key.startsWith(".")))
-  ) {
+  if (typeof exportsField === "string" || Array.isArray(exportsField)) {
+    validateConditionalShape(exportsField);
     return subpath === "." ? exportsField : undefined;
   }
-  if (!exportsField || typeof exportsField !== "object") return undefined;
+  if (exportsField === null) return subpath === "." ? null : undefined;
+  if (!exportsField || typeof exportsField !== "object") {
+    throw new Error(
+      "Invalid package exports configuration: expected a target or an object."
+    );
+  }
+
+  const keys = Object.keys(exportsField);
+  const subpathKeys = keys.filter(isSubpathKey);
+  if (subpathKeys.length && subpathKeys.length !== keys.length) {
+    throw new Error(
+      "Invalid package exports configuration: do not mix subpath keys and condition keys at the same object level."
+    );
+  }
+  if (!subpathKeys.length) {
+    validateConditionalShape(exportsField);
+    return subpath === "." ? exportsField : undefined;
+  }
+  for (const key of subpathKeys) {
+    validateSubpathKey(key);
+    validateConditionalShape(exportsField[key]);
+  }
+
   if (Object.hasOwn(exportsField, subpath)) return exportsField[subpath];
 
-  const matches = Object.keys(exportsField)
+  const matches = subpathKeys
     .filter((key) => key.includes("*"))
     .map((key) => {
       const [prefix, suffix] = key.split("*");
@@ -121,22 +212,48 @@ function exportValue(exportsField, subpath) {
 }
 
 function resolvePackageExport(configuration, directory, subpath = ".") {
-  const selection = conditionalTargets(
+  const selection = conditionalTarget(
     exportValue(configuration.exports, subpath)
   );
-  if (selection.blocked) return undefined;
-  for (const target of selection.targets) {
-    if (!target.startsWith("./")) continue;
-    const entry = resolve(directory, target);
-    if (
-      isWithin(directory, entry) &&
-      existsSync(entry) &&
-      statSync(entry).isFile()
-    ) {
-      return { target, entry };
-    }
+  if (selection.kind !== "target") return undefined;
+  const { target } = selection;
+  if (
+    !target.startsWith("./") ||
+    target.includes("\\") ||
+    target.includes("?") ||
+    target.includes("#") ||
+    target.includes("%")
+  ) {
+    throw new Error(
+      `Invalid package exports target "${target}": only relative file targets inside the workspace package are supported.`
+    );
   }
-  return undefined;
+  const targetSegments = target.slice(2).split("/");
+  if (
+    targetSegments.some(
+      (segment) =>
+        !segment ||
+        segment === "." ||
+        segment === ".." ||
+        segment.toLowerCase() === "node_modules"
+    )
+  ) {
+    throw new Error(
+      `Invalid package exports target "${target}": dot segments, empty segments, and node_modules are not supported.`
+    );
+  }
+  const entry = resolve(directory, target);
+  if (!isWithin(directory, entry)) {
+    throw new Error(
+      `Invalid package exports target "${target}": targets must stay within the workspace package.`
+    );
+  }
+  if (!existsSync(entry) || !statSync(entry).isFile()) {
+    throw new Error(
+      `Package exports target "${target}" selected for ${subpath} does not resolve to a file in this workspace package.`
+    );
+  }
+  return { target, entry };
 }
 
 function packageDirectory(root, packagePath, packageName) {
