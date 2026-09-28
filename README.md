@@ -107,6 +107,8 @@ To open the development Storybook from another device, allow its hostname:
 STORYBOOK_ALLOWED_HOSTS=100.119.211.103 npm run storybook -- --host 0.0.0.0 --no-open
 ```
 
+See [building browser bundles](docs/browser-bundles.md) for producing self-contained browser bundles from workspace packages.
+
 Package releases use Changesets. Public APIs are described by generated Custom Elements Manifests.
 
 ### Pre-1.0 release policy
