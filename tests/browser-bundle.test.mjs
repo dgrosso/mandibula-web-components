@@ -42,6 +42,31 @@ function outputChunk(overrides = {}) {
   };
 }
 
+async function createWorkspace(root, packageName, exports, files) {
+  const packageDirectory = join(root, "packages", packageName);
+  await mkdir(packageDirectory, { recursive: true });
+  await writeFile(
+    join(root, "package.json"),
+    JSON.stringify({ private: true, workspaces: ["packages/*"] })
+  );
+  await writeFile(
+    join(packageDirectory, "package.json"),
+    JSON.stringify({
+      name: `@mandibula/${packageName}`,
+      version: "1.0.0",
+      license: "MIT",
+      files: ["src"],
+      exports,
+    })
+  );
+  for (const [path, contents] of Object.entries(files)) {
+    const filePath = join(packageDirectory, path);
+    await mkdir(join(filePath, ".."), { recursive: true });
+    await writeFile(filePath, contents);
+  }
+  return packageDirectory;
+}
+
 test("discovers Mandíbula packages from workspace metadata", async (t) => {
   const packages = await discoverBrowserBundlePackages();
   assert.ok(packages.some((pkg) => pkg.name === "@mandibula/slider"));
@@ -104,6 +129,118 @@ test("discovers Mandíbula packages from workspace metadata", async (t) => {
     discoverBrowserBundlePackages(root),
     /must expose a compatible public root/
   );
+});
+
+test("conditional export null blocks active browser targets terminally", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "mandibula-conditional-exports-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const checkExports = async (exports, expected) => {
+    await createWorkspace(root, "condition-fixture", exports, {
+      "src/browser.js": "export {};\n",
+      "src/fallback.js": "export {};\n",
+    });
+    if (expected) {
+      const [pkg] = await discoverBrowserBundlePackages(root);
+      assert.equal(pkg.rootExport, expected);
+    } else {
+      await assert.rejects(
+        discoverBrowserBundlePackages(root),
+        /must expose a compatible public root/
+      );
+    }
+  };
+
+  await checkExports(
+    { ".": { browser: null, default: "./src/fallback.js" } },
+    null
+  );
+  await checkExports(
+    {
+      ".": {
+        browser: { import: null, default: "./src/fallback.js" },
+        default: "./src/fallback.js",
+      },
+    },
+    null
+  );
+  await checkExports(
+    {
+      ".": {
+        "custom-condition": null,
+        browser: "./src/browser.js",
+        default: "./src/fallback.js",
+      },
+    },
+    "./src/browser.js"
+  );
+  await checkExports(
+    { ".": { browser: "./src/browser.js", import: "./src/fallback.js" } },
+    "./src/browser.js"
+  );
+  await checkExports(
+    { ".": { import: "./src/fallback.js", default: "./src/browser.js" } },
+    "./src/fallback.js"
+  );
+  await checkExports(
+    {
+      ".": {
+        "custom-condition": "./src/missing.js",
+        default: "./src/fallback.js",
+      },
+    },
+    "./src/fallback.js"
+  );
+});
+
+test("export pattern matching uses suffix specificity independent of order", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "mandibula-export-patterns-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const files = {
+    "src/index.js":
+      'import "@mandibula/pattern-fixture/widget.js"; import "@mandibula/pattern-fixture/only.js"; import "@mandibula/pattern-fixture/theme";\n',
+    "src/exact/widget.js": "globalThis.patternTarget = 'exact';\n",
+    "src/specific/only.js": "globalThis.patternTarget = 'specific';\n",
+    "src/general/only.js": "globalThis.patternTarget = 'general';\n",
+    "src/general/theme": "globalThis.patternTarget = 'wildcard';\n",
+  };
+  const buildAndAssert = async (exports) => {
+    await createWorkspace(root, "pattern-fixture", exports, files);
+    const result = await buildBrowserBundle({
+      packages: ["pattern-fixture"],
+      root,
+      format: "esm",
+    });
+    const moduleIds = result.moduleGraph.modules.map((module) => module.id);
+    assert.ok(
+      moduleIds.includes("@mandibula/pattern-fixture@1.0.0/src/exact/widget.js")
+    );
+    assert.ok(
+      moduleIds.includes(
+        "@mandibula/pattern-fixture@1.0.0/src/specific/only.js"
+      )
+    );
+    assert.ok(
+      moduleIds.includes("@mandibula/pattern-fixture@1.0.0/src/general/theme")
+    );
+    assert.ok(
+      !moduleIds.includes(
+        "@mandibula/pattern-fixture@1.0.0/src/general/only.js"
+      )
+    );
+  };
+
+  await buildAndAssert({
+    ".": "./src/index.js",
+    "./*": "./src/general/*",
+    "./*.js": "./src/specific/*.js",
+    "./widget.js": "./src/exact/widget.js",
+  });
+  await buildAndAssert({
+    ".": "./src/index.js",
+    "./*.js": "./src/specific/*.js",
+    "./*": "./src/general/*",
+    "./widget.js": "./src/exact/widget.js",
+  });
 });
 
 test("normalizes short and canonical names deterministically", async () => {

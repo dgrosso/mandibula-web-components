@@ -45,15 +45,23 @@ function isWithin(parent, candidate) {
 }
 
 function conditionalTargets(value) {
-  if (typeof value === "string") return [value];
-  if (Array.isArray(value)) return value.flatMap(conditionalTargets);
-  if (!value || typeof value !== "object") return [];
+  if (value === null) return { targets: [], blocked: true };
+  if (typeof value === "string") return { targets: [value], blocked: false };
+  if (Array.isArray(value)) {
+    const targets = [];
+    for (const candidate of value) {
+      const result = conditionalTargets(candidate);
+      if (result.targets.length) targets.push(...result.targets);
+    }
+    return { targets, blocked: false };
+  }
+  if (typeof value !== "object") return { targets: [], blocked: false };
   for (const [condition, candidate] of Object.entries(value)) {
     if (!EXPORT_CONDITIONS.has(condition)) continue;
-    const targets = conditionalTargets(candidate);
-    if (targets.length) return targets;
+    const result = conditionalTargets(candidate);
+    if (result.blocked || result.targets.length) return result;
   }
-  return [];
+  return { targets: [], blocked: false };
 }
 
 function exportValue(exportsField, subpath) {
@@ -78,10 +86,19 @@ function exportValue(exportsField, subpath) {
         prefix.length,
         subpath.length - suffix.length
       );
-      return { key, capture, prefixLength: prefix.length };
+      return {
+        key,
+        capture,
+        prefixLength: prefix.length,
+        suffixLength: suffix.length,
+      };
     })
     .filter(Boolean)
-    .sort((left, right) => right.prefixLength - left.prefixLength);
+    .sort(
+      (left, right) =>
+        right.prefixLength - left.prefixLength ||
+        right.suffixLength - left.suffixLength
+    );
   const match = matches[0];
   if (!match) return undefined;
 
@@ -104,9 +121,11 @@ function exportValue(exportsField, subpath) {
 }
 
 function resolvePackageExport(configuration, directory, subpath = ".") {
-  for (const target of conditionalTargets(
+  const selection = conditionalTargets(
     exportValue(configuration.exports, subpath)
-  )) {
+  );
+  if (selection.blocked) return undefined;
+  for (const target of selection.targets) {
     if (!target.startsWith("./")) continue;
     const entry = resolve(directory, target);
     if (
