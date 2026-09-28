@@ -9,6 +9,7 @@ import {
   buildBrowserBundle,
   discoverBrowserBundlePackages,
   normalizeBrowserBundleSelection,
+  summarizeBrowserBundleDependencies,
   validateBrowserBundleOutput,
 } from "../scripts/browser-bundle-lib.mjs";
 
@@ -120,6 +121,69 @@ test("normalizes short and canonical names deterministically", async () => {
   assert.deepEqual(shortNames, ["@mandibula/slider", "@mandibula/video"]);
   assert.deepEqual(canonicalNames, shortNames);
   assert.deepEqual(duplicates, shortNames);
+});
+
+test("preserves dependency versions and rejects multiple Lit runtime versions", () => {
+  assert.deepEqual(
+    summarizeBrowserBundleDependencies([
+      { packageName: "shared-library", version: "2.0.0" },
+      { packageName: "shared-library", version: "1.0.0" },
+      { packageName: "unversioned-library", version: null },
+      { packageName: "@mandibula/local-package", version: "1.0.0" },
+    ]),
+    [
+      { name: "shared-library", version: "1.0.0" },
+      { name: "shared-library", version: "2.0.0" },
+      { name: "unversioned-library", version: null },
+    ]
+  );
+  assert.deepEqual(
+    summarizeBrowserBundleDependencies([
+      { packageName: "@lit-labs/build-tools", version: "1.0.0" },
+      { packageName: "@lit-labs/build-tools", version: "2.0.0" },
+    ]),
+    [
+      { name: "@lit-labs/build-tools", version: "1.0.0" },
+      { name: "@lit-labs/build-tools", version: "2.0.0" },
+    ]
+  );
+
+  for (const packageName of [
+    "lit",
+    "lit-element",
+    "lit-html",
+    "@lit/reactive-element",
+    "@lit/context",
+    "@lit-labs/ssr-dom-shim",
+  ]) {
+    assert.throws(
+      () =>
+        summarizeBrowserBundleDependencies([
+          { packageName, version: "1.0.0" },
+          { packageName, version: "2.0.0" },
+        ]),
+      (error) =>
+        error.message.includes(packageName) &&
+        error.message.includes("1.0.0") &&
+        error.message.includes("2.0.0")
+    );
+  }
+  assert.throws(
+    () =>
+      summarizeBrowserBundleDependencies([
+        {
+          id: "@lit/reactive-element@2.1.2/src/decorators.js",
+          packageName: "@lit/reactive-element",
+          version: "2.1.2",
+        },
+        {
+          id: "@lit/reactive-element@2.1.2/src/decorators.js",
+          packageName: "@lit/reactive-element",
+          version: "2.1.2",
+        },
+      ]),
+    /Duplicate Lit runtime module identity/
+  );
 });
 
 test("rejects invalid package selections with actionable messages", async () => {
@@ -254,6 +318,67 @@ test("transitive Mandíbula imports resolve from workspace exports", async () =>
     javascriptChunks: 1,
     runtimeAssets: [],
   });
+});
+
+test("rejects Vite browser-compatibility replacement modules", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "mandibula-browser-external-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const packageDirectory = join(root, "packages", "node-builtin-fixture");
+  await mkdir(join(packageDirectory, "src"), { recursive: true });
+  await writeFile(
+    join(root, "package.json"),
+    JSON.stringify({ private: true, workspaces: ["packages/*"] })
+  );
+  await writeFile(
+    join(packageDirectory, "package.json"),
+    JSON.stringify({
+      name: "@mandibula/node-builtin-fixture",
+      version: "1.0.0",
+      license: "MIT",
+      files: ["src"],
+      exports: { ".": "./src/index.js" },
+    })
+  );
+  await writeFile(
+    join(packageDirectory, "src", "index.js"),
+    'import { readFileSync } from "node:fs"; globalThis.fixtureRead = readFileSync;\n'
+  );
+
+  await assert.rejects(
+    buildBrowserBundle({ packages: ["node-builtin-fixture"], root }),
+    (error) =>
+      error.message.includes("__vite-browser-external") &&
+      error.message.includes(
+        "@mandibula/node-builtin-fixture@1.0.0/src/index.js"
+      )
+  );
+
+  await writeFile(
+    join(packageDirectory, "package.json"),
+    JSON.stringify({
+      name: "@mandibula/node-builtin-fixture",
+      version: "1.0.0",
+      license: "MIT",
+      files: ["src"],
+      exports: { ".": "./src/index.js" },
+      peerDependencies: { "missing-optional-peer": "^1.0.0" },
+      peerDependenciesMeta: {
+        "missing-optional-peer": { optional: true },
+      },
+    })
+  );
+  await writeFile(
+    join(packageDirectory, "src", "index.js"),
+    'import optionalPeer from "missing-optional-peer"; globalThis.fixturePeer = optionalPeer;\n'
+  );
+  await assert.rejects(
+    buildBrowserBundle({ packages: ["node-builtin-fixture"], root }),
+    (error) =>
+      error.message.includes("__vite-optional-peer-dep") &&
+      error.message.includes(
+        "@mandibula/node-builtin-fixture@1.0.0/src/index.js"
+      )
+  );
 });
 
 test("validates output-contract failures instead of accepting companion files", () => {

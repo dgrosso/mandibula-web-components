@@ -17,6 +17,20 @@ const EXPORT_CONDITIONS = new Set([
   "production",
   "default",
 ]);
+const VITE_BROWSER_COMPATIBILITY_MODULES = [
+  "__vite-browser-external",
+  "browser-external:",
+  "__vite-optional-peer-dep",
+  "optional-peer-dep:",
+];
+const LIT_RUNTIME_PACKAGES = new Set([
+  "lit",
+  "lit-element",
+  "lit-html",
+  "@lit/reactive-element",
+  "@lit/context",
+  "@lit-labs/ssr-dom-shim",
+]);
 
 function toPosix(value) {
   return value.split(sep).join("/");
@@ -408,9 +422,105 @@ function assetSource(asset) {
     : Buffer.from(asset.source).toString("utf8");
 }
 
+export function summarizeBrowserBundleDependencies(modules) {
+  const dependencies = new Map();
+  const litVersions = new Map();
+  const litModuleIdentities = new Set();
+
+  for (const module of modules) {
+    const { packageName, version = null } = module;
+    if (!packageName || packageName.startsWith(MANDIBULA_SCOPE)) continue;
+
+    dependencies.set(JSON.stringify([packageName, version]), {
+      name: packageName,
+      version,
+    });
+    if (!LIT_RUNTIME_PACKAGES.has(packageName)) continue;
+
+    if (module.id && litModuleIdentities.has(module.id)) {
+      throw new Error(
+        `Duplicate Lit runtime module identity "${module.id}" was resolved. A browser bundle must include one identity for each Lit runtime module.`
+      );
+    }
+    if (module.id) litModuleIdentities.add(module.id);
+
+    const versions = litVersions.get(packageName) ?? new Set();
+    versions.add(version);
+    litVersions.set(packageName, versions);
+  }
+
+  for (const [packageName, versions] of litVersions) {
+    if (versions.size < 2) continue;
+    const formattedVersions = [...versions]
+      .map((version) => version ?? "unknown")
+      .sort(compareStrings);
+    throw new Error(
+      `Multiple versions of Lit runtime package ${packageName} were resolved: ${formattedVersions.join(", ")}. A browser bundle must use one version of each Lit runtime package.`
+    );
+  }
+
+  return [...dependencies.values()].sort(
+    (left, right) =>
+      compareStrings(left.name, right.name) ||
+      compareStrings(left.version ?? "", right.version ?? "")
+  );
+}
+
+function isBrowserCompatibilityReplacement(moduleId) {
+  const normalizedId = moduleId.replace(/^\0/, "");
+  return VITE_BROWSER_COMPATIBILITY_MODULES.some((prefix) =>
+    normalizedId.startsWith(prefix)
+  );
+}
+
+function assertNoBrowserCompatibilityReplacements(
+  moduleIds,
+  compatibilityImporters = new Map()
+) {
+  const replacement = moduleIds
+    .find(isBrowserCompatibilityReplacement)
+    ?.replace(/^\0/, "");
+  if (!replacement) return;
+
+  const importers = compatibilityImporters.get(replacement) ?? [];
+  const importerDetail = importers.length
+    ? ` Imported by: ${importers.join(", ")}.`
+    : "";
+  throw new Error(
+    `Vite emitted the browser-compatibility replacement module "${replacement}". This usually means a dependency was externalized for browser compatibility or an optional peer dependency could not be resolved; browser bundles do not allow these substitutions.${importerDetail}`
+  );
+}
+
+function createCompatibilityGraphPlugin(catalog, compatibilityImporters) {
+  return {
+    name: "mandibula-browser-bundle-compatibility-validator",
+    enforce: "post",
+    generateBundle() {
+      for (const id of this.getModuleIds()) {
+        if (!isBrowserCompatibilityReplacement(id)) continue;
+        const importers = this.getModuleInfo(id)?.importers ?? [];
+        compatibilityImporters.set(
+          id.replace(/^\0/, ""),
+          [
+            ...new Set(
+              importers.map((importer) => moduleIdentity(importer, catalog).id)
+            ),
+          ].sort(compareStrings)
+        );
+      }
+    },
+  };
+}
+
 function validateBuildOutput(
   output,
-  { sourcemap = false, catalog, outputDirectory, includeModuleIds = true } = {}
+  {
+    sourcemap = false,
+    catalog,
+    outputDirectory,
+    includeModuleIds = true,
+    compatibilityImporters,
+  } = {}
 ) {
   const entries = Array.isArray(output) ? output : [];
   const chunks = entries.filter((entry) => entry?.type === "chunk");
@@ -421,6 +531,8 @@ function validateBuildOutput(
     );
   }
   const [chunk] = chunks;
+  const moduleIds = Object.keys(chunk.modules ?? {});
+  assertNoBrowserCompatibilityReplacements(moduleIds, compatibilityImporters);
   if (!chunk.isEntry || typeof chunk.code !== "string" || !chunk.code.trim()) {
     throw new Error(
       "Vite did not produce an executable browser-bundle entry chunk."
@@ -484,9 +596,7 @@ function validateBuildOutput(
   return {
     code: chunk.code,
     sourceMap,
-    ...(includeModuleIds
-      ? { moduleIds: Object.keys(chunk.modules ?? {}) }
-      : {}),
+    ...(includeModuleIds ? { moduleIds } : {}),
     staticImports,
     dynamicImports,
     fileName: chunk.fileName,
@@ -536,6 +646,7 @@ export async function buildBrowserBundle({
     join(tmpdir(), "mandibula-browser-bundle-")
   );
   const resolvedWorkspacePackages = new Set();
+  const compatibilityImporters = new Map();
   let buildResult;
   try {
     buildResult = await viteBuild({
@@ -580,6 +691,7 @@ export async function buildBrowserBundle({
           },
         },
         createWorkspaceResolver(catalog, resolvedWorkspacePackages),
+        createCompatibilityGraphPlugin(catalog, compatibilityImporters),
       ],
     });
   } finally {
@@ -591,21 +703,20 @@ export async function buildBrowserBundle({
     sourcemap,
     catalog,
     outputDirectory: join(cacheDirectory, "output"),
+    compatibilityImporters,
   });
   const modules = validated.moduleIds
     .map((id) => moduleIdentity(id, catalog))
     .sort((left, right) => compareStrings(left.id, right.id));
   const workspacePackages = new Map();
-  const dependencyPackages = new Map();
   for (const module of modules) {
     if (!module.packageName) continue;
     if (module.packageName.startsWith(MANDIBULA_SCOPE)) {
       const pkg = catalog.byName.get(module.packageName);
       if (pkg) workspacePackages.set(pkg.name, pkg.version);
-    } else if (module.version) {
-      dependencyPackages.set(module.packageName, module.version);
     }
   }
+  const dependencies = summarizeBrowserBundleDependencies(modules);
 
   return {
     selectedPackages,
@@ -615,9 +726,7 @@ export async function buildBrowserBundle({
     resolvedWorkspacePackages: [...resolvedWorkspacePackages].sort(
       compareStrings
     ),
-    dependencies: [...dependencyPackages]
-      .sort(([left], [right]) => compareStrings(left, right))
-      .map(([name, version]) => ({ name, version })),
+    dependencies,
     format,
     minified: minify,
     code: validated.code,
