@@ -64,27 +64,18 @@ function isAbsoluteSource(value) {
 }
 
 function rewriteSourceMapReference(code, sourceMapFile) {
-  const referencePattern =
-    /\/\/#\s*sourceMappingURL=[^\r\n]+|\/\*#\s*sourceMappingURL=[\s\S]*?\*\//g;
-  const references = [...code.matchAll(referencePattern)];
-  if (references.length > 1) {
-    throw new Error(
-      "The browser bundle contains multiple source-map references."
-    );
-  }
+  const trailingReferencePattern =
+    /(?:\/\/[#@][ \t]*sourceMappingURL=[^\s]+|\/\*[#@][ \t]*sourceMappingURL=[^*\r\n]+?\*\/)([ \t]*(?:\r?\n[ \t]*)*)$/;
+  const match = code.match(trailingReferencePattern);
   if (!sourceMapFile) {
-    if (references.length) {
-      throw new Error(
-        "The browser bundle references a source map although sourcemaps are disabled."
-      );
-    }
-    return code;
+    return match ? `${code.slice(0, match.index)}${match[1]}` : code;
   }
 
   const reference = `//# sourceMappingURL=${sourceMapFile}`;
-  return references.length
-    ? code.replace(referencePattern, reference)
-    : `${code}\n${reference}\n`;
+  if (match) {
+    return `${code.slice(0, match.index)}${reference}${match[1]}`;
+  }
+  return `${code}${code.endsWith("\n") ? "" : "\n"}${reference}\n`;
 }
 
 function createMetadata(result, names, javascriptBytes, sourceMapFile) {
@@ -193,7 +184,8 @@ export async function writeBrowserBundleArtifacts(result, { outDir } = {}) {
         "The browser bundle source map contains an absolute source path."
       );
     }
-    sourceMap = result.sourceMap;
+    parsedMap.file = names.javascriptFile;
+    sourceMap = JSON.stringify(parsedMap);
   }
 
   const javascript = rewriteSourceMapReference(

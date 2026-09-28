@@ -20,7 +20,10 @@ import {
   resolveBrowserBundleOutputDirectory,
   runBrowserBundleCommand,
 } from "../scripts/browser-bundle-cli-lib.mjs";
-import { getBrowserBundleArtifactNames } from "../scripts/browser-bundle-artifacts.mjs";
+import {
+  getBrowserBundleArtifactNames,
+  writeBrowserBundleArtifacts,
+} from "../scripts/browser-bundle-artifacts.mjs";
 
 const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
 const cliPath = join(repositoryRoot, "scripts", "browser-bundle.mjs");
@@ -260,9 +263,14 @@ test("builds deterministic artifacts, maps, and metadata without disturbing neig
   assert.equal(esmMetadata.minified, false);
   assert.equal(esmMetadata.sourcemap, true);
   assert.equal(esmMetadata.sourceMapFile, esmNames.sourceMapFile);
-  assert.ok(
-    esmJavaScript.includes(`sourceMappingURL=${esmNames.sourceMapFile}`)
+  const sourceMapReference = esmJavaScript.match(
+    /(?:^|\n)\/\/# sourceMappingURL=([^\s]+)[ \t]*(?:\r?\n[ \t]*)*$/
   );
+  const parsedEsmMap = JSON.parse(esmMap);
+  assert.equal(esmMetadata.javascriptFile, esmNames.javascriptFile);
+  assert.equal(parsedEsmMap.file, esmNames.javascriptFile);
+  assert.equal(sourceMapReference?.[1], esmNames.sourceMapFile);
+  assert.equal(esmMetadata.sourceMapFile, esmNames.sourceMapFile);
   assert.ok(!esmMap.includes(repositoryRoot));
   assert.ok(!esmMap.includes(outDir));
   assert.equal(esmOutput.read().split("\n")[1], esmNames.javascriptFile);
@@ -293,6 +301,104 @@ test("builds deterministic artifacts, maps, and metadata without disturbing neig
   assert.ok(
     (await readdir(outDir)).every(
       (name) => !name.startsWith(".mandibula-browser-bundle-")
+    )
+  );
+});
+
+test("rewrites only a trailing source-map directive and corrects map filenames", async (t) => {
+  const outDir = await mkdtemp(
+    join(tmpdir(), "mandibula-source-map-directive-")
+  );
+  t.after(() => rm(outDir, { recursive: true, force: true }));
+
+  const makeResult = (code, sourceMap) => ({
+    selectedPackages: ["@mandibula/video"],
+    workspacePackages: [{ name: "@mandibula/video", version: "1.0.0" }],
+    dependencies: [],
+    format: "esm",
+    minified: false,
+    code,
+    ...(sourceMap === undefined ? {} : { sourceMap }),
+  });
+  const map = JSON.stringify({
+    version: 3,
+    file: "internal-chunk.js",
+    sourceRoot: "workspace://source",
+    sources: ["@mandibula/video/src/index.js"],
+    names: [],
+    mappings: "",
+    x_google_ignoreList: [0],
+  });
+
+  const embeddedText =
+    'const example = "//# sourceMappingURL=string.map";\n' +
+    "const template = `/*# sourceMappingURL=template.map */`;\n" +
+    "/* earlier comment //# sourceMappingURL=comment.map */\n";
+  const noMapDir = join(outDir, "no-map");
+  await writeBrowserBundleArtifacts(makeResult(embeddedText), {
+    outDir: noMapDir,
+  });
+  const noMapNames = getBrowserBundleArtifactNames({
+    selectedPackages: ["@mandibula/video"],
+    format: "esm",
+    minified: false,
+  });
+  assert.equal(
+    await readFile(join(noMapDir, noMapNames.javascriptFile), "utf8"),
+    embeddedText
+  );
+
+  const lineDir = join(outDir, "line");
+  const lineCode = `${embeddedText}//# sourceMappingURL=internal.map  \n\n`;
+  await writeBrowserBundleArtifacts(makeResult(lineCode, map), {
+    outDir: lineDir,
+  });
+  const lineJavascript = await readFile(
+    join(lineDir, noMapNames.javascriptFile),
+    "utf8"
+  );
+  assert.ok(lineJavascript.startsWith(embeddedText));
+  assert.ok(
+    lineJavascript.endsWith(
+      `//# sourceMappingURL=${noMapNames.sourceMapFile}  \n\n`
+    )
+  );
+  const correctedMap = JSON.parse(
+    await readFile(join(lineDir, noMapNames.sourceMapFile), "utf8")
+  );
+  assert.equal(correctedMap.file, noMapNames.javascriptFile);
+  assert.equal(correctedMap.sourceRoot, "workspace://source");
+  assert.deepEqual(correctedMap.sources, ["@mandibula/video/src/index.js"]);
+  assert.deepEqual(correctedMap.x_google_ignoreList, [0]);
+
+  const blockDir = join(outDir, "block");
+  const blockCode = `${embeddedText}/*# sourceMappingURL=internal.map */ \n`;
+  await writeBrowserBundleArtifacts(makeResult(blockCode, map), {
+    outDir: blockDir,
+  });
+  const blockJavascript = await readFile(
+    join(blockDir, noMapNames.javascriptFile),
+    "utf8"
+  );
+  assert.ok(blockJavascript.startsWith(embeddedText));
+  assert.ok(
+    blockJavascript.endsWith(
+      `//# sourceMappingURL=${noMapNames.sourceMapFile} \n`
+    )
+  );
+
+  const withoutDirectiveDir = join(outDir, "without-directive");
+  await writeBrowserBundleArtifacts(makeResult(embeddedText, map), {
+    outDir: withoutDirectiveDir,
+  });
+  const appendedJavascript = await readFile(
+    join(withoutDirectiveDir, noMapNames.javascriptFile),
+    "utf8"
+  );
+  assert.ok(appendedJavascript.startsWith(embeddedText));
+  assert.ok(
+    appendedJavascript.endsWith(
+      `//# sourceMappingURL=${noMapNames.sourceMapFile}\n`
     )
   );
 });
