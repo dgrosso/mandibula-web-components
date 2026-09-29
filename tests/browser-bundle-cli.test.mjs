@@ -424,6 +424,7 @@ test("preserves final string and template text that resembles source-map directi
   const examples = [
     'const example = "//# sourceMappingURL=fake.map";',
     "const example = `//# sourceMappingURL=fake.map`;",
+    "const example = `\n    //# sourceMappingURL=fake.map`;",
   ];
 
   for (const [index, code] of examples.entries()) {
@@ -449,13 +450,9 @@ test("preserves final string and template text that resembles source-map directi
       join(withMapDir, names.javascriptFile),
       "utf8"
     );
-    assert.ok(javascript.startsWith(`${code}\n`));
     assert.equal(
-      [...javascript.matchAll(/^[ \t]*\/\/# sourceMappingURL=/gm)].length,
-      1
-    );
-    assert.ok(
-      javascript.endsWith(`//# sourceMappingURL=${names.sourceMapFile}\n`)
+      javascript,
+      `${code}\n//# sourceMappingURL=${names.sourceMapFile}\n`
     );
     const parsedMap = JSON.parse(
       await readFile(join(withMapDir, names.sourceMapFile), "utf8")
