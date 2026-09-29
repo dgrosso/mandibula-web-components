@@ -30,6 +30,7 @@
     "version-packages": "changeset version",
     "release:plan": "node scripts/release-plan.mjs",
     "release:pack:github": "node scripts/release-pack.mjs github",
+    "release:pack:browser": "node scripts/browser-bundle-release.mjs",
     "release:pack:npm": "node scripts/release-pack.mjs npm",
     "release:validate": "node scripts/release-validate.mjs",
     "release:test": "node --test tests/release/*.test.mjs",

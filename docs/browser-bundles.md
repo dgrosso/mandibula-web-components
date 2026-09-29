@@ -35,3 +35,19 @@ For example, an IIFE bundle can be loaded without resolving imports in the consu
 Each build writes the JavaScript bundle, a deterministic JSON metadata sidecar, and—when requested—a source map next to it. The metadata records the selected packages, included workspace versions, third-party dependency identities, build options, filenames, JavaScript byte size, and SHA-256 digest. It contains no timestamps or local filesystem paths.
 
 The browser-bundle contract requires exactly one executable JavaScript file and no external runtime imports, dynamic chunks, extracted styles, or companion runtime assets. Dependencies used by the selected components are included in the bundle. Rebuilding the same selection and options replaces only those artifact files; other bundles in the output directory are left in place.
+
+## GitHub Release browser bundles
+
+Each GitHub Release also contains one ready-to-load production bundle for every eligible public Mandíbula workspace package. Release bundles use minified IIFE format without source maps and follow the `mandibula-<package>.iife.min.js` filename pattern. The `browser-bundle-manifest.json` asset records each bundle's immutable release URL, included workspace packages, third-party dependencies, byte size, and SHA-256 checksum. `browser-bundle-third-party-licenses.txt` carries the license notices for the bundled dependencies.
+
+Pin a release tag in the URL so the selected bundle and checksum remain tied to that repository snapshot:
+
+```html
+<script src="https://github.com/dgrosso/mandibula-web-components/releases/download/<release-tag>/mandibula-video.iife.min.js"></script>
+```
+
+To prepare the same release assets locally, supply both the release tag and output directory:
+
+```sh
+npm run release:pack:browser -- --tag release-<commit> --output release-artifacts/browser
+```
