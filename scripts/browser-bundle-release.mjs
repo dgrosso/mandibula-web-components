@@ -25,7 +25,6 @@ async function main() {
   console.log(
     JSON.stringify(
       {
-        output: result.outputPath,
         packages: result.manifest.bundles.length,
         manifest: "browser-bundle-manifest.json",
         assets: result.assets,

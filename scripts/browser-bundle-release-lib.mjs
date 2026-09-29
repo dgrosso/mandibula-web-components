@@ -5,13 +5,23 @@ import {
   lstat,
   mkdir,
   mkdtemp,
+  realpath,
   readFile,
   readdir,
   rename,
   rm,
+  stat,
   writeFile,
 } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
+import {
+  dirname,
+  isAbsolute,
+  join,
+  relative,
+  resolve,
+  sep,
+  win32,
+} from "node:path";
 import { tmpdir } from "node:os";
 import {
   buildBrowserBundle,
@@ -22,6 +32,37 @@ import { gitOutput, RELEASE_BASE, REPOSITORY } from "./release-lib.mjs";
 
 const compareStrings = (left, right) =>
   left < right ? -1 : left > right ? 1 : 0;
+
+function isWithinDirectory(parent, candidate) {
+  const path = relative(parent, candidate);
+  return (
+    path === "" ||
+    (!path.startsWith(`..${sep}`) && path !== ".." && !isAbsolute(path))
+  );
+}
+
+function safeNoticeCandidate(packageRoot, candidate, packageName) {
+  if (
+    typeof candidate !== "string" ||
+    !candidate ||
+    isAbsolute(candidate) ||
+    win32.isAbsolute(candidate) ||
+    candidate.includes("\\") ||
+    candidate.includes(":") ||
+    candidate.split("/").some((part) => !part || part === "." || part === "..")
+  ) {
+    throw new Error(
+      `Unsafe license notice path for bundled dependency ${packageName}.`
+    );
+  }
+  const path = resolve(packageRoot, candidate);
+  if (!isWithinDirectory(packageRoot, path)) {
+    throw new Error(
+      `License notice path for bundled dependency ${packageName} escapes its package directory.`
+    );
+  }
+  return path;
+}
 
 async function thirdPartyNotices(root, dependencies) {
   const require = createRequire(join(root, "package.json"));
@@ -45,7 +86,7 @@ async function thirdPartyNotices(root, dependencies) {
         );
         if (metadata.name === dependency.name) {
           if (metadata.version !== dependency.version) break;
-          packageRoot = current;
+          packageRoot = await realpath(current);
           identities.set(key, { metadata, packageRoot });
           break;
         }
@@ -83,12 +124,26 @@ async function thirdPartyNotices(root, dependencies) {
     let noticeFile;
     let text;
     for (const candidate of candidates) {
+      const candidatePath = safeNoticeCandidate(packageRoot, candidate, key);
       try {
-        text = await readFile(join(packageRoot, candidate), "utf8");
+        const canonicalPath = await realpath(candidatePath);
+        if (!isWithinDirectory(packageRoot, canonicalPath)) {
+          throw new Error(
+            `License notice for bundled dependency ${key} resolves outside its package directory.`
+          );
+        }
+        const details = await stat(canonicalPath);
+        if (!details.isFile()) {
+          throw new Error(
+            `License notice for bundled dependency ${key} is not a regular file.`
+          );
+        }
+        text = await readFile(canonicalPath, "utf8");
         noticeFile = candidate;
         break;
       } catch (error) {
-        if (error.code !== "ENOENT") throw error;
+        if (error.code === "ENOENT") continue;
+        throw error;
       }
     }
     if (!text)

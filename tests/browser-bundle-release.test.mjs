@@ -61,6 +61,74 @@ async function fixture(t) {
   return root;
 }
 
+async function prepareLicenseFixture(t, { license, noticePath, contents }) {
+  const root = await mkdtemp(join(tmpdir(), "mandibula-license-boundary-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const output = join(root, "out");
+  const packageRoot = join(root, "node_modules/license-fixture");
+  const outsideFile = join(root, "outside-secret");
+  await mkdir(packageRoot, { recursive: true });
+  await writeFile(
+    join(root, "package.json"),
+    JSON.stringify({ private: true })
+  );
+  await writeFile(outsideFile, "OUTSIDE PACKAGE SECRET\n");
+  await writeFile(
+    join(packageRoot, "package.json"),
+    JSON.stringify({
+      name: "license-fixture",
+      version: "1.0.0",
+      license,
+      main: "index.js",
+    })
+  );
+  await writeFile(join(packageRoot, "index.js"), "module.exports = {};\n");
+  if (noticePath && contents) {
+    const notice = join(packageRoot, noticePath);
+    await mkdir(join(notice, ".."), { recursive: true });
+    await writeFile(notice, contents);
+  }
+  const run = () =>
+    prepareBrowserBundleRelease({
+      root,
+      output,
+      tag: "release-license-test",
+      commitSha,
+      discover: async () => [
+        {
+          name: "@mandibula/license-fixture",
+          shortName: "license-fixture",
+          version: "1.0.0",
+        },
+      ],
+      build: async () => ({
+        selectedPackages: ["@mandibula/license-fixture"],
+        workspacePackages: [
+          { name: "@mandibula/license-fixture", version: "1.0.0" },
+        ],
+        dependencies: [{ name: "license-fixture", version: "1.0.0" }],
+        format: "iife",
+        minified: true,
+        sourceMap: null,
+        code: "globalThis.licenseFixture=true;",
+      }),
+      writeArtifacts: async (_result, { outDir }) => {
+        const javascriptFile = "mandibula-license-fixture.iife.min.js";
+        const bytes = Buffer.from("globalThis.licenseFixture=true;");
+        await writeFile(join(outDir, javascriptFile), bytes);
+        const metadataFile = "mandibula-license-fixture.iife.min.json";
+        await writeFile(join(outDir, metadataFile), "{}\n");
+        return {
+          javascriptFile,
+          metadataFile,
+          byteSize: bytes.byteLength,
+          sha256: createHash("sha256").update(bytes).digest("hex"),
+        };
+      },
+    });
+  return { root, output, outsideFile, run };
+}
+
 test("builds one sorted, deterministic release bundle per eligible package with exact manifest integrity", async (t) => {
   const root = await fixture(t);
   const output = join(root, "release-artifacts/browser");
@@ -266,4 +334,95 @@ test("release builder rejects invalid CLI arguments", () => {
     assert.notEqual(result.status, 0);
     assert.ok(result.stderr.length < 1000);
   }
+});
+
+test("successful CLI output does not expose absolute repository or output paths", async (t) => {
+  const output = await mkdtemp(join(tmpdir(), "mandibula-browser-cli-output-"));
+  t.after(() => rm(output, { recursive: true, force: true }));
+  const result = spawnSync(
+    process.execPath,
+    [cliPath, "--tag", "release-cli-test", "--output", output],
+    { cwd: repositoryRoot, encoding: "utf8", timeout: 30000 }
+  );
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stdout.includes(repositoryRoot), false);
+  assert.equal(result.stdout.includes(output), false);
+  assert.equal(JSON.parse(result.stdout).packages, 10);
+});
+
+test("rejects SEE LICENSE IN traversal without publishing outside contents", async (t) => {
+  const fixture = await prepareLicenseFixture(t, {
+    license: "SEE LICENSE IN ../../outside-secret",
+  });
+  await assert.rejects(fixture.run(), /Unsafe license notice path/);
+  const outputs = await readdir(fixture.output);
+  assert.deepEqual(outputs, []);
+  assert.equal(outputs.join(" ").includes("OUTSIDE PACKAGE SECRET"), false);
+});
+
+test("rejects absolute SEE LICENSE IN paths without publishing outside contents", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "mandibula-license-absolute-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const outsideFile = join(root, "outside-secret");
+  await writeFile(outsideFile, "OUTSIDE PACKAGE SECRET\n");
+  const fixture = await prepareLicenseFixture(t, {
+    license: `SEE LICENSE IN ${outsideFile}`,
+  });
+  await assert.rejects(fixture.run(), /Unsafe license notice path/);
+  const outputs = await readdir(fixture.output);
+  assert.deepEqual(outputs, []);
+  assert.equal(outputs.join(" ").includes("OUTSIDE PACKAGE SECRET"), false);
+});
+
+test("rejects a conventional license symlink that escapes its package", async (t) => {
+  const fixture = await prepareLicenseFixture(t, { license: "MIT" });
+  await symlink(
+    fixture.outsideFile,
+    join(fixture.root, "node_modules/license-fixture/LICENSE")
+  );
+  await assert.rejects(fixture.run(), /resolves outside its package directory/);
+  const outputs = await readdir(fixture.output);
+  assert.deepEqual(outputs, []);
+  assert.equal(outputs.join(" ").includes("OUTSIDE PACKAGE SECRET"), false);
+});
+
+test("accepts a valid nested notice path within the dependency package", async (t) => {
+  const fixture = await prepareLicenseFixture(t, {
+    license: "SEE LICENSE IN notices/LICENSE.txt",
+    noticePath: "notices/LICENSE.txt",
+    contents: "Nested package notice.\n",
+  });
+  const result = await fixture.run();
+  const manifest = result.manifest;
+  assert.deepEqual(manifest.thirdPartyLicenses[0], {
+    name: "license-fixture",
+    version: "1.0.0",
+    license: "SEE LICENSE IN notices/LICENSE.txt",
+    noticeFile: "notices/LICENSE.txt",
+  });
+  assert.match(
+    await readFile(
+      join(fixture.output, manifest.licenseNotices.filename),
+      "utf8"
+    ),
+    /Nested package notice/
+  );
+});
+
+test("continues to use a conventional LICENSE file", async (t) => {
+  const fixture = await prepareLicenseFixture(t, {
+    license: "MIT",
+    noticePath: "LICENSE",
+    contents: "Conventional package notice.\n",
+  });
+  const result = await fixture.run();
+  const manifest = result.manifest;
+  assert.equal(manifest.thirdPartyLicenses[0].noticeFile, "LICENSE");
+  assert.match(
+    await readFile(
+      join(fixture.output, manifest.licenseNotices.filename),
+      "utf8"
+    ),
+    /Conventional package notice/
+  );
 });
