@@ -403,6 +403,67 @@ test("rewrites only a trailing source-map directive and corrects map filenames",
   );
 });
 
+test("preserves final string and template text that resembles source-map directives", async (t) => {
+  const outDir = await mkdtemp(
+    join(tmpdir(), "mandibula-source-map-string-tail-")
+  );
+  t.after(() => rm(outDir, { recursive: true, force: true }));
+
+  const names = getBrowserBundleArtifactNames({
+    selectedPackages: ["@mandibula/video"],
+    format: "esm",
+    minified: false,
+  });
+  const map = JSON.stringify({
+    version: 3,
+    file: "internal-chunk.js",
+    sources: ["@mandibula/video/src/index.js"],
+    names: [],
+    mappings: "",
+  });
+  const examples = [
+    'const example = "//# sourceMappingURL=fake.map";',
+    "const example = `//# sourceMappingURL=fake.map`;",
+  ];
+
+  for (const [index, code] of examples.entries()) {
+    const result = (sourceMap) => ({
+      selectedPackages: ["@mandibula/video"],
+      workspacePackages: [{ name: "@mandibula/video", version: "1.0.0" }],
+      dependencies: [],
+      format: "esm",
+      minified: false,
+      code,
+      ...(sourceMap === null ? {} : { sourceMap }),
+    });
+    const noMapDir = join(outDir, `no-map-${index}`);
+    await writeBrowserBundleArtifacts(result(null), { outDir: noMapDir });
+    assert.deepEqual(
+      await readFile(join(noMapDir, names.javascriptFile)),
+      Buffer.from(code)
+    );
+
+    const withMapDir = join(outDir, `with-map-${index}`);
+    await writeBrowserBundleArtifacts(result(map), { outDir: withMapDir });
+    const javascript = await readFile(
+      join(withMapDir, names.javascriptFile),
+      "utf8"
+    );
+    assert.ok(javascript.startsWith(`${code}\n`));
+    assert.equal(
+      [...javascript.matchAll(/^[ \t]*\/\/# sourceMappingURL=/gm)].length,
+      1
+    );
+    assert.ok(
+      javascript.endsWith(`//# sourceMappingURL=${names.sourceMapFile}\n`)
+    );
+    const parsedMap = JSON.parse(
+      await readFile(join(withMapDir, names.sourceMapFile), "utf8")
+    );
+    assert.equal(parsedMap.file, names.javascriptFile);
+  }
+});
+
 test("a failed build leaves existing artifacts and unrelated files untouched", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "mandibula-browser-cli-failure-"));
   const outDir = join(root, "output");

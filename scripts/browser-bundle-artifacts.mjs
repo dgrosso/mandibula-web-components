@@ -65,15 +65,17 @@ function isAbsoluteSource(value) {
 
 function rewriteSourceMapReference(code, sourceMapFile) {
   const trailingReferencePattern =
-    /(?:\/\/[#@][ \t]*sourceMappingURL=[^\s]+|\/\*[#@][ \t]*sourceMappingURL=[^*\r\n]+?\*\/)([ \t]*(?:\r?\n[ \t]*)*)$/;
+    /(^|\r\n|\r|\n)([ \t]*)(?:\/\/[#@][ \t]*sourceMappingURL=[^\s]+|\/\*[#@][ \t]*sourceMappingURL=[^*\r\n]+?\*\/)([ \t]*(?:\r?\n[ \t]*)*)$/;
   const match = code.match(trailingReferencePattern);
   if (!sourceMapFile) {
-    return match ? `${code.slice(0, match.index)}${match[1]}` : code;
+    return match
+      ? `${code.slice(0, match.index)}${match[1]}${match[2]}${match[3]}`
+      : code;
   }
 
   const reference = `//# sourceMappingURL=${sourceMapFile}`;
   if (match) {
-    return `${code.slice(0, match.index)}${reference}${match[1]}`;
+    return `${code.slice(0, match.index)}${match[1]}${match[2]}${reference}${match[3]}`;
   }
   return `${code}${code.endsWith("\n") ? "" : "\n"}${reference}\n`;
 }
