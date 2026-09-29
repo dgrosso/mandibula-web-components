@@ -2,6 +2,7 @@ node_modules/
 coverage/
 site/
 /dist/browser/
+/release-artifacts/
 playwright-report/
 .DS_Store
 *.log

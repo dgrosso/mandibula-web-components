@@ -38,6 +38,9 @@ jobs:
       - name: Build GitHub Release packages
         if: steps.release-plan.outputs.release_required == 'true'
         run: npm run release:pack:github -- --tag "${{ steps.release-plan.outputs.release_tag }}" --output release-artifacts
+      - name: Build GitHub Release browser bundles
+        if: steps.release-plan.outputs.release_required == 'true'
+        run: npm run release:pack:browser -- --tag "${{ steps.release-plan.outputs.release_tag }}" --output release-artifacts/browser
       - name: Write release notes
         if: steps.release-plan.outputs.release_required == 'true'
         env:
@@ -49,6 +52,11 @@ jobs:
             echo
             echo "Install individual packages with:"
             jq -r '.packages[] | "- `\(.installCommand)`"' release-artifacts/release-manifest.json
+            echo
+            echo "Browser bundles:"
+            jq -r '.bundles[] | "- `\(.package.name)@\(.package.version)` — `\(.filename)`"' release-artifacts/browser/browser-bundle-manifest.json
+            echo
+            echo 'Exact bundle URLs and SHA-256 checksums are available in `browser-bundle-manifest.json`.'
           } > release-artifacts/release-notes.md
       - name: Create or update GitHub Release
         if: steps.release-plan.outputs.release_required == 'true'
@@ -61,4 +69,4 @@ jobs:
           else
             gh release create "$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file release-artifacts/release-notes.md --target "${{ github.sha }}"
           fi
-          gh release upload "$RELEASE_TAG" release-artifacts/*.tgz release-artifacts/release-manifest.json --clobber
+          gh release upload "$RELEASE_TAG" release-artifacts/*.tgz release-artifacts/release-manifest.json release-artifacts/browser/*.js release-artifacts/browser/browser-bundle-manifest.json release-artifacts/browser/browser-bundle-third-party-licenses.txt --clobber
